@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nebula Match — Mission debriefing and performance statistics.">
+  <title>Mission Debrief — Nebula Match</title>
+  
+  <!-- Shared Design System & Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Space Atmosphere & Decorative Cosmic Backdrop -->
+  <div class="space-backdrop" aria-hidden="true">
+    <div class="starfield"></div>
+    <div class="orbital-ring"></div>
+  </div>
+
+  <div class="page-container">
+    
+    <!-- Top Navigation Bar -->
+    <header class="site-header">
+      <a href="index.html" class="brand-badge" aria-label="Nebula Match Home">
+        <div class="brand-icon-wrapper">
+          <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="6"></circle>
+            <path d="M2.5 14.5c3.5 3.5 12.5 2 17-2.5s3-9.5-0.5-9.5c-3.5 0-9 4-13 8.5"></path>
+          </svg>
+        </div>
+        <span>Nebula Match</span>
+      </a>
+
+      <!-- Center Nav Links -->
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="index.html" class="header-nav-link">Home</a>
+        <a href="how-to-play.html" class="header-nav-link">How to Play</a>
+        <a href="leaderboard.html" class="header-nav-link">Leaderboard</a>
+      </nav>
+
+      <!-- Right Auth / Identity Group -->
+      <div class="header-auth-group" id="headerAuthGroup">
+        <a href="login.html" class="btn btn-secondary btn-sm" id="authBtn">Sign In</a>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content" style="flex-direction: column;">
+      
+      <section class="results-wrapper" aria-labelledby="debrief-heading">
+        
+        <!-- Debrief Card -->
+        <article class="results-card" id="resultsCard">
+          
+          <!-- Outcome Banner -->
+          <div class="results-outcome-badge" id="outcomeBadge">
+            <span id="outcomeIcon">✦</span>
+            <span id="outcomeStatusText">Mission Accomplished</span>
+            <span id="outcomeIconRight">✦</span>
+          </div>
+
+          <h1 id="debrief-heading" class="results-main-title">
+            Cosmic Memory Debrief
+          </h1>
+          <p class="results-subtitle" id="outcomeDesc">
+            All celestial signatures verified before chronometer depletion.
+          </p>
+
+          <!-- Score & Rank Showcase -->
+          <div class="results-hero-score">
+            <div class="rank-medal" id="rankMedal" title="Mission Performance Rank">
+              <span class="rank-letter" id="rankLetter">S</span>
+              <span class="rank-sub">Rank</span>
+            </div>
+            <div class="score-data-wrap">
+              <div class="score-hero-label">Final Mission Score</div>
+              <div class="score-hero-number" id="finalScoreDigits">1,480</div>
+            </div>
+          </div>
+
+          <!-- Mission Performance Breakdown Grid -->
+          <div class="results-stats-grid">
+            
+            <div class="result-stat-item">
+              <span class="stat-item-label">Difficulty Tier</span>
+              <span class="stat-item-val" id="statDifficulty">Commander</span>
+            </div>
+
+            <div class="result-stat-item">
+              <span class="stat-item-label">Signatures Paired</span>
+              <span class="stat-item-val" id="statPairs">8 / 8</span>
+            </div>
+
+            <div class="result-stat-item">
+              <span class="stat-item-label">Total Moves</span>
+              <span class="stat-item-val" id="statMoves">14 Moves</span>
+            </div>
+
+            <div class="result-stat-item">
+              <span class="stat-item-label">Memory Accuracy</span>
+              <span class="stat-item-val stat-item-val--accent" id="statAccuracy">86%</span>
+            </div>
+
+            <div class="result-stat-item">
+              <span class="stat-item-label">Chronometer Remaining</span>
+              <span class="stat-item-val" id="statTimeRemaining">18s</span>
+            </div>
+
+            <div class="result-stat-item">
+              <span class="stat-item-label">Star Challenge Bonus</span>
+              <span class="stat-item-val stat-item-val--gold" id="statBonusTime">+15s Claimed</span>
+            </div>
+
+          </div>
+
+          <!-- Explorer Call Sign Submission Form -->
+          <div class="leaderboard-submission-box">
+            <div class="submission-prompt">
+              <label for="explorerCallsign" class="form-label">Explorer Call Sign for Galactic Record:</label>
+              <div class="submission-input-row">
+                <input 
+                  type="text" 
+                  id="explorerCallsign" 
+                  class="form-input" 
+                  placeholder="Enter Explorer Call Sign..." 
+                  maxlength="20">
+                <button type="button" id="submitScoreBtn" class="btn btn-primary">
+                  <span>Save to Leaderboard</span>
+                </button>
+              </div>
+            </div>
+            <div id="submissionFeedback" class="submission-feedback" aria-live="polite"></div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="results-actions">
+            <button type="button" id="playAgainBtn" class="btn btn-primary btn-lg">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              <span>Play Again</span>
+            </button>
+            <a href="leaderboard.html" class="btn btn-secondary btn-lg">
+              <span>View Leaderboard</span>
+            </a>
+            <a href="difficulty.html" class="btn btn-secondary btn-lg">
+              <span>Change Difficulty</span>
+            </a>
+          </div>
+
+        </article>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom Page Footer -->
+    <footer class="site-footer">
+      <nav class="footer-nav" aria-label="Auxiliary navigation">
+        <a href="index.html">Home</a>
+        <span>•</span>
+        <a href="leaderboard.html">Leaderboard</a>
+        <span>•</span>
+        <a href="how-to-play.html">How to Play</a>
+      </nav>
+    </footer>
+
+  </div>
+
+  <script src="js/home.js"></script>
+  <script src="js/results.js"></script>
+</body>
+</html>
+

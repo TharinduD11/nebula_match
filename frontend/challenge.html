@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nebula Match — The Fish Game API Terminal. Solve the fish counting quest for bonus time.">
+  <title>The Fish Game — Nebula Match</title>
+  
+  <!-- Shared Design System & Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Space Atmosphere & Decorative Cosmic Backdrop -->
+  <div class="space-backdrop" aria-hidden="true">
+    <div class="starfield"></div>
+    <div class="orbital-ring"></div>
+  </div>
+
+  <div class="page-container">
+    
+    <!-- Top Navigation Bar -->
+    <header class="site-header">
+      <a href="index.html" class="brand-badge" aria-label="Nebula Match Home">
+        <div class="brand-icon-wrapper">
+          <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="6"></circle>
+            <path d="M2.5 14.5c3.5 3.5 12.5 2 17-2.5s3-9.5-0.5-9.5c-3.5 0-9 4-13 8.5"></path>
+          </svg>
+        </div>
+        <span>Nebula Match</span>
+      </a>
+
+      <!-- Center Nav Links -->
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="index.html" class="header-nav-link">Home</a>
+        <a href="how-to-play.html" class="header-nav-link">How to Play</a>
+        <a href="leaderboard.html" class="header-nav-link">Leaderboard</a>
+      </nav>
+
+      <!-- Right Auth / Identity Group -->
+      <div class="header-auth-group" id="headerAuthGroup">
+        <a href="login.html" class="btn btn-secondary btn-sm" id="authBtn">Sign In</a>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content" style="flex-direction: column;">
+      
+      <section class="auth-card auth-card--challenge-standalone" aria-labelledby="fish-game-title">
+        
+        <header class="fish-standalone-header">
+          <div class="hero-pill" style="margin-bottom: 8px;">
+            <span>✦</span>
+            <span>API Interoperability Terminal</span>
+            <span>✦</span>
+          </div>
+          <h1 id="fish-game-title" class="auth-title" style="margin-bottom: 2px;">The Fish Game</h1>
+          <p class="fish-doc-link">
+            Connected to <code>https://marcconrad.com/uob/fish/</code>
+          </p>
+        </header>
+
+        <!-- Picture Display Box (matching Image 3) -->
+        <div class="fish-picture-card" id="fishPictureCard">
+          <div class="fish-loading" id="fishLoading">
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <span>Loading Fish Picture from API...</span>
+          </div>
+          <img id="fishImg" class="fish-img" alt="The Fish Game Quest Picture" style="display: none;" />
+        </div>
+
+        <!-- Quest Status Message (matching Image 3) -->
+        <div class="fish-quest-status" id="fishQuestStatus">
+          Quest is ready.
+        </div>
+
+        <!-- Submission Form (matching Image 3) -->
+        <form id="fishGameForm" class="fish-game-form" novalidate>
+          <label for="fishCountInput" class="fish-input-label">
+            Enter the number of fish in the picture:
+          </label>
+          <div class="fish-input-row">
+            <input 
+              type="number" 
+              id="fishCountInput" 
+              class="form-input fish-number-input" 
+              min="0" 
+              max="25" 
+              step="1" 
+              placeholder="0" 
+              required 
+              autocomplete="off" />
+            <button type="submit" id="fishSubmitBtn" class="btn btn-primary">
+              Submit
+            </button>
+          </div>
+        </form>
+
+        <!-- Feedback Alert Container -->
+        <div id="fishFeedback" class="fish-feedback" aria-live="polite"></div>
+
+        <!-- Action Controls (matching Image 3) -->
+        <div class="fish-actions-row" style="margin-top: 14px;">
+          <button type="button" class="btn btn-secondary" id="fishTryAgainBtn" style="display: none;">
+            Try Again
+          </button>
+          <a href="game.html" class="btn btn-secondary" id="backToGameBtn">
+            Back to game
+          </a>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom Page Footer -->
+    <footer class="site-footer">
+      <nav class="footer-nav" aria-label="Auxiliary navigation">
+        <a href="index.html">Home</a>
+        <span>•</span>
+        <a href="how-to-play.html">How to Play</a>
+        <span>•</span>
+        <a href="difficulty.html">Difficulty</a>
+      </nav>
+    </footer>
+
+  </div>
+
+  <script src="js/home.js"></script>
+  <script src="js/challenge.js"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nebula Match — Select your memory expedition difficulty: Cadet, Commander, or Cosmic Ace.">
+  <title>Difficulty Selection — Nebula Match</title>
+  
+  <!-- Shared Design System & Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Space Atmosphere & Decorative Cosmic Backdrop -->
+  <div class="space-backdrop" aria-hidden="true">
+    <div class="starfield"></div>
+    <div class="orbital-ring"></div>
+  </div>
+
+  <div class="page-container">
+    
+    <!-- Top Navigation Bar -->
+    <header class="site-header">
+      <a href="index.html" class="brand-badge" aria-label="Nebula Match Home">
+        <div class="brand-icon-wrapper">
+          <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="6"></circle>
+            <path d="M2.5 14.5c3.5 3.5 12.5 2 17-2.5s3-9.5-0.5-9.5c-3.5 0-9 4-13 8.5"></path>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <span>Nebula Match</span>
+      </a>
+
+      <!-- Center Nav Links -->
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="index.html" class="header-nav-link">Home</a>
+        <a href="how-to-play.html" class="header-nav-link">How to Play</a>
+        <a href="leaderboard.html" class="header-nav-link">Leaderboard</a>
+      </nav>
+
+      <!-- Right Auth / Identity Group -->
+      <div class="header-auth-group" id="headerAuthGroup">
+        <a href="login.html" class="btn btn-secondary btn-sm" id="authBtn">Sign In</a>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content" style="flex-direction: column;">
+      
+      <section class="difficulty-wrapper" aria-labelledby="diff-title">
+        
+        <div class="page-intro">
+          <div class="hero-pill">
+            <span>✦</span>
+            <span>Expedition Configuration</span>
+            <span>✦</span>
+          </div>
+          <h1 id="diff-title" class="page-main-title">
+            Select Mission Orbit
+          </h1>
+          <p class="page-main-desc">
+            Calibrate grid density and chronometer duration according to your cognitive threshold.
+          </p>
+        </div>
+
+        <!-- 3 Tier Selection Cards -->
+        <div class="difficulty-grid" role="radiogroup" aria-label="Mission difficulty tiers">
+          
+          <!-- Tier 1: Cadet (Easy) -->
+          <article class="tier-card" data-tier="easy" tabindex="0" role="radio" aria-checked="false">
+            <div class="tier-header">
+              <span class="tier-tag">Training Orbit</span>
+              <div class="tier-glyph-circle" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+            <h2 class="tier-title">Cadet</h2>
+            <p class="tier-desc">Gentle cosmic grid with generous reaction time. Ideal for warming up visual memory.</p>
+            
+            <div class="tier-specs">
+              <div class="spec-row">
+                <span class="spec-label">Grid Layout</span>
+                <span class="spec-val">4 × 3 (12 Cards)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Pairs to Match</span>
+                <span class="spec-val">6 Celestial Pairs</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Chronometer</span>
+                <span class="spec-val spec-val--highlight">60 Seconds</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Score Multiplier</span>
+                <span class="spec-val">1.0×</span>
+              </div>
+            </div>
+
+            <div class="tier-select-indicator">
+              <span class="indicator-radio"></span>
+              <span class="indicator-label">Select Cadet</span>
+            </div>
+          </article>
+
+          <!-- Tier 2: Commander (Medium) - Default -->
+          <article class="tier-card tier-card--featured is-selected" data-tier="medium" tabindex="0" role="radio" aria-checked="true">
+            <div class="tier-badge-recommended">Recommended</div>
+            <div class="tier-header">
+              <span class="tier-tag">Interstellar Orbit</span>
+              <div class="tier-glyph-circle" style="background: rgba(99, 102, 241, 0.18); color: #818cf8;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                  <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path>
+                </svg>
+              </div>
+            </div>
+            <h2 class="tier-title">Commander</h2>
+            <p class="tier-desc">Balanced high-tempo expedition requiring sharp recall and tactical pacing.</p>
+            
+            <div class="tier-specs">
+              <div class="spec-row">
+                <span class="spec-label">Grid Layout</span>
+                <span class="spec-val">4 × 4 (16 Cards)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Pairs to Match</span>
+                <span class="spec-val">8 Celestial Pairs</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Chronometer</span>
+                <span class="spec-val spec-val--highlight">45 Seconds</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Score Multiplier</span>
+                <span class="spec-val">1.5×</span>
+              </div>
+            </div>
+
+            <div class="tier-select-indicator">
+              <span class="indicator-radio"></span>
+              <span class="indicator-label">Selected Commander</span>
+            </div>
+          </article>
+
+          <!-- Tier 3: Cosmic Ace (Hard) -->
+          <article class="tier-card" data-tier="hard" tabindex="0" role="radio" aria-checked="false">
+            <div class="tier-header">
+              <span class="tier-tag">Deep Space Warp</span>
+              <div class="tier-glyph-circle" style="background: rgba(244, 63, 94, 0.14); color: #f43f5e;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+            </div>
+            <h2 class="tier-title">Cosmic Ace</h2>
+            <p class="tier-desc">Unforgiving memory trial with dense card grid. Reserved for elite spatial navigators.</p>
+            
+            <div class="tier-specs">
+              <div class="spec-row">
+                <span class="spec-label">Grid Layout</span>
+                <span class="spec-val">5 × 4 (20 Cards)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Pairs to Match</span>
+                <span class="spec-val">10 Celestial Pairs</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Chronometer</span>
+                <span class="spec-val spec-val--highlight">35 Seconds</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Score Multiplier</span>
+                <span class="spec-val">2.0×</span>
+              </div>
+            </div>
+
+            <div class="tier-select-indicator">
+              <span class="indicator-radio"></span>
+              <span class="indicator-label">Select Cosmic Ace</span>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Launch Mission Action Controls -->
+        <div class="difficulty-actions">
+          <button type="button" id="launchGameBtn" class="btn btn-primary btn-lg">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span id="launchBtnText">Launch Commander Expedition (45s)</span>
+          </button>
+          
+          <a href="how-to-play.html" class="btn btn-secondary btn-lg">
+            <span>Review Flight Rules</span>
+          </a>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom Page Footer -->
+    <footer class="site-footer">
+      <nav class="footer-nav" aria-label="Auxiliary navigation">
+        <a href="index.html">Home</a>
+        <span>•</span>
+        <a href="how-to-play.html">How to Play</a>
+        <span>•</span>
+        <a href="leaderboard.html">Leaderboard</a>
+      </nav>
+    </footer>
+
+  </div>
+
+  <!-- Shared Auth & Difficulty Selector Script -->
+  <script src="js/home.js"></script>
+  <script src="js/difficulty.js"></script>
+</body>
+</html>
+

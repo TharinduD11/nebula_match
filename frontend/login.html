@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nebula Match — Sign in to your cosmic memory expedition account.">
+  <title>Sign In — Nebula Match</title>
+  
+  <!-- Shared Design System & Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Space Atmosphere & Decorative Cosmic Backdrop -->
+  <div class="space-backdrop" aria-hidden="true">
+    <div class="starfield"></div>
+    <div class="orbital-ring"></div>
+  </div>
+
+  <div class="page-container">
+    
+    <!-- Top Navigation / Brand Bar -->
+    <header class="site-header">
+      <a href="index.html" class="brand-badge" aria-label="Nebula Match Home">
+        <div class="brand-icon-wrapper">
+          <!-- Stylized Planet with Orbital Ring Icon -->
+          <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="6"></circle>
+            <path d="M2.5 14.5c3.5 3.5 12.5 2 17-2.5s3-9.5-0.5-9.5c-3.5 0-9 4-13 8.5"></path>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <span>Nebula Match</span>
+      </a>
+
+      <div class="system-status" aria-label="System status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Virtual Identity Lab</span>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <section class="auth-card" aria-labelledby="login-heading">
+        
+        <!-- Header & Logo Glyph -->
+        <header class="auth-header">
+          <div class="auth-header-glyph" aria-hidden="true">
+            <!-- Modern Cosmic Sparkle / Celestial Compass Icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path>
+              <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.3"></circle>
+            </svg>
+          </div>
+          <h1 id="login-heading" class="auth-title">Welcome Back</h1>
+          <p class="auth-description">Sign in to resume your cosmic memory expedition.</p>
+        </header>
+
+        <!-- Dynamic Feedback Alert Container -->
+        <div id="authAlert" class="auth-alert" role="alert" hidden>
+          <svg class="auth-alert-icon" id="alertIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
+          <span id="alertMessage" class="auth-alert-text"></span>
+        </div>
+
+        <!-- Authentication Form -->
+        <form id="loginForm" class="auth-form" novalidate>
+          
+          <!-- Email / Username Input Group -->
+          <div class="form-group" id="identifierGroup">
+            <div class="form-label-row">
+              <label for="identifier" class="form-label">Email or Username</label>
+            </div>
+            <div class="input-wrapper">
+              <svg class="input-icon-lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input 
+                type="text" 
+                id="identifier" 
+                name="identifier" 
+                class="form-input" 
+                placeholder="explorer@nebula.io or astro_ace" 
+                autocomplete="username" 
+                autocapitalize="none" 
+                spellcheck="false"
+                aria-required="true"
+                aria-describedby="identifierError">
+            </div>
+            <span id="identifierError" class="field-error-msg" aria-live="polite"></span>
+          </div>
+
+          <!-- Password Input Group with Accessible Toggle -->
+          <div class="form-group" id="passwordGroup">
+            <div class="form-label-row">
+              <label for="password" class="form-label">Password</label>
+              <a href="#" id="forgotPasswordLink" class="label-link" tabindex="0">Forgot password?</a>
+            </div>
+            <div class="input-wrapper input-wrapper--has-trailing">
+              <svg class="input-icon-lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                class="form-input" 
+                placeholder="••••••••••••" 
+                autocomplete="current-password" 
+                aria-required="true"
+                aria-describedby="passwordError">
+              <button 
+                type="button" 
+                id="togglePassword" 
+                class="password-toggle-btn" 
+                aria-label="Show password" 
+                aria-controls="password" 
+                aria-pressed="false"
+                title="Show password">
+                <!-- Eye Icon (Default) -->
+                <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <!-- Eye Off Icon (Hidden initially) -->
+                <svg id="eyeOffIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+            <span id="passwordError" class="field-error-msg" aria-live="polite"></span>
+          </div>
+
+          <!-- Primary Submit Button with Embedded Spinner -->
+          <button type="submit" id="submitBtn" class="btn btn-primary btn-block">
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <span class="btn-text-content">Sign In</span>
+          </button>
+
+        </form>
+
+        <!-- Card Footer & Registration Link -->
+        <footer class="auth-footer">
+          <p>
+            Don't have an explorer account? 
+            <a href="signup.html" id="signupLink" class="link-accent">Sign Up</a>
+          </p>
+        </footer>
+
+      </section>
+    </main>
+
+    <!-- Bottom Page Footer -->
+    <footer class="site-footer">
+      <nav class="footer-nav" aria-label="Auxiliary navigation">
+        <a href="index.html">Home</a>
+        <span>•</span>
+        <a href="how-to-play.html">How to Play</a>
+        <span>•</span>
+        <a href="signup.html">Sign Up</a>
+      </nav>
+    </footer>
+
+  </div>
+
+  <!-- Page Scripts -->
+  <script src="js/login.js"></script>
+</body>
+</html>
+

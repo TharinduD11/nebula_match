@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nebula Match — A 2D Apple-inspired cosmic memory matching game with Fish Game API challenges.">
+  <title>Nebula Match — Cosmic Memory Expedition</title>
+  
+  <!-- Shared Design System & Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Space Atmosphere & Decorative Cosmic Backdrop -->
+  <div class="space-backdrop" aria-hidden="true">
+    <div class="starfield"></div>
+    <div class="orbital-ring"></div>
+  </div>
+
+  <div class="page-container">
+    
+    <!-- Top Navigation Bar -->
+    <header class="site-header">
+      <a href="index.html" class="brand-badge" aria-label="Nebula Match Home">
+        <div class="brand-icon-wrapper">
+          <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="6"></circle>
+            <path d="M2.5 14.5c3.5 3.5 12.5 2 17-2.5s3-9.5-0.5-9.5c-3.5 0-9 4-13 8.5"></path>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <span>Nebula Match</span>
+      </a>
+
+      <!-- Center Nav Links -->
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="index.html" class="header-nav-link active">Home</a>
+        <a href="how-to-play.html" class="header-nav-link">How to Play</a>
+        <a href="leaderboard.html" class="header-nav-link">Leaderboard</a>
+      </nav>
+
+      <!-- Right Auth / Identity Group -->
+      <div class="header-auth-group" id="headerAuthGroup">
+        <a href="login.html" class="btn btn-secondary btn-sm" id="authBtn">Sign In</a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" style="flex-direction: column;">
+      
+      <!-- Hero Section -->
+      <section class="hero-wrapper" aria-labelledby="hero-title">
+        
+        <!-- Eyebrow Tag -->
+        <div class="hero-pill">
+          <span>✦</span>
+          <span>Cosmic Memory Expedition</span>
+          <span>✦</span>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 id="hero-title" class="hero-title">
+          Explore the Cosmos.<br>
+          <span class="hero-title-accent">Master Your Memory.</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="hero-subtitle">
+          Uncover matching celestial pairs before the countdown timer expires. When seconds run low, trigger live mathematical challenges from the Fish Game API to earn vital bonus time.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="hero-actions">
+          <a href="difficulty.html" class="btn btn-primary btn-lg" id="playBtn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Launch Expedition</span>
+          </a>
+          <a href="how-to-play.html" class="btn btn-secondary btn-lg">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Mission Guide</span>
+          </a>
+        </div>
+
+        <!-- Interactive 3D Card Showcase (Apple-Style Preview) -->
+        <div class="showcase-container" aria-label="Interactive Card Preview">
+          <div class="showcase-grid" id="showcaseGrid">
+            
+            <!-- Card 1: Earth / Blue Planet -->
+            <div class="showcase-card" tabindex="0" role="button" aria-label="Card preview: Earth">
+              <div class="showcase-card-face showcase-card-front">
+                <svg class="card-back-pattern" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path>
+                </svg>
+                <span class="card-back-label">Nebula</span>
+              </div>
+              <div class="showcase-card-face showcase-card-back">
+                <svg class="showcase-glyph" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M3.6 9h16.8M3.6 15h16.8"></path>
+                  <path d="M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18"></path>
+                </svg>
+                <span class="showcase-label">Terra</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Golden Sun / Star -->
+            <div class="showcase-card" tabindex="0" role="button" aria-label="Card preview: Solar Star">
+              <div class="showcase-card-face showcase-card-front">
+                <svg class="card-back-pattern" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path>
+                </svg>
+                <span class="card-back-label">Nebula</span>
+              </div>
+              <div class="showcase-card-face showcase-card-back">
+                <svg class="showcase-glyph" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="23"></line>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                  <line x1="1" y1="12" x2="3" y2="12"></line>
+                  <line x1="21" y1="12" x2="23" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <span class="showcase-label">Solar</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Ringed Saturn -->
+            <div class="showcase-card" tabindex="0" role="button" aria-label="Card preview: Saturn">
+              <div class="showcase-card-face showcase-card-front">
+                <svg class="card-back-pattern" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path>
+                </svg>
+                <span class="card-back-label">Nebula</span>
+              </div>
+              <div class="showcase-card-face showcase-card-back">
+                <svg class="showcase-glyph" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <path d="M2.5 14.5c3.5 3.5 12.5 2 17-2.5s3-9.5-0.5-9.5c-3.5 0-9 4-13 8.5"></path>
+                </svg>
+                <span class="showcase-label">Saturn</span>
+              </div>
+            </div>
+
+            <!-- Card 4: Lunar Crescent -->
+            <div class="showcase-card" tabindex="0" role="button" aria-label="Card preview: Moon">
+              <div class="showcase-card-face showcase-card-front">
+                <svg class="card-back-pattern" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path>
+                </svg>
+                <span class="card-back-label">Nebula</span>
+              </div>
+              <div class="showcase-card-face showcase-card-back">
+                <svg class="showcase-glyph" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <span class="showcase-label">Lunar</span>
+              </div>
+            </div>
+
+          </div>
+          <p class="showcase-hint">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 15l6 6m-11-4a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"></path></svg>
+            <span>Hover or click cards to flip and preview celestial targets</span>
+          </p>
+        </div>
+
+      </section>
+
+      <!-- Mission Briefing / Systems Features -->
+      <section class="features-section" aria-labelledby="briefing-title">
+        <header class="features-heading">
+          <h2 id="briefing-title" class="features-section-title">Mission Architecture</h2>
+          <p class="features-section-desc">Key systems engineered for your cognitive journey across the cosmos.</p>
+        </header>
+
+        <div class="features-grid">
+          
+          <!-- Feature 1: Memory Grid -->
+          <article class="feature-card">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </div>
+            <h3 class="feature-title">Celestial Memory Grid</h3>
+            <p class="feature-desc">
+              Flip and recall pairs of planets, moons, and constellations before the mission timer elapses. Test short-term visual memory across adaptive difficulties.
+            </p>
+            <span class="feature-badge">Core Engine</span>
+          </article>
+
+          <!-- Feature 2: Fish Game API Interoperability -->
+          <article class="feature-card">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <h3 class="feature-title">Fish Game API Challenges</h3>
+            <p class="feature-desc">
+              When time is running low, activate the star trigger to query the Fish Game API for a mathematical puzzle. Correct solutions yield vital bonus time.
+            </p>
+            <span class="feature-badge">API Interoperability</span>
+          </article>
+
+          <!-- Feature 3: Virtual Identity & Leaderboard -->
+          <article class="feature-card">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                <path d="M4 22h16"></path>
+                <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"></path>
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Galactic Leaderboards</h3>
+            <p class="feature-desc">
+              Scores and mission statistics are linked to your explorer virtual identity and preserved in MongoDB, letting you compete for the galaxy’s highest honors.
+            </p>
+            <span class="feature-badge">Score Persistence</span>
+          </article>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Page Footer -->
+    <footer class="site-footer">
+      <nav class="footer-nav" aria-label="Auxiliary navigation">
+        <a href="index.html">Home</a>
+        <span>•</span>
+        <a href="how-to-play.html">How to Play</a>
+        <span>•</span>
+        <a href="leaderboard.html">Leaderboard</a>
+        <span>•</span>
+        <a href="login.html">Sign In</a>
+      </nav>
+    </footer>
+
+  </div>
+
+  <!-- Home Page Scripts -->
+  <script src="js/home.js"></script>
+</body>
+</html>
+

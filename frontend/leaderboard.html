@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nebula Match — Galactic Hall of Fame and Explorer High Scores.">
+  <title>Galactic Leaderboard — Nebula Match</title>
+  
+  <!-- Shared Design System & Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Space Atmosphere & Decorative Cosmic Backdrop -->
+  <div class="space-backdrop" aria-hidden="true">
+    <div class="starfield"></div>
+    <div class="orbital-ring"></div>
+  </div>
+
+  <div class="page-container">
+    
+    <!-- Top Navigation Bar -->
+    <header class="site-header">
+      <a href="index.html" class="brand-badge" aria-label="Nebula Match Home">
+        <div class="brand-icon-wrapper">
+          <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="6"></circle>
+            <path d="M2.5 14.5c3.5 3.5 12.5 2 17-2.5s3-9.5-0.5-9.5c-3.5 0-9 4-13 8.5"></path>
+          </svg>
+        </div>
+        <span>Nebula Match</span>
+      </a>
+
+      <!-- Center Nav Links -->
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="index.html" class="header-nav-link">Home</a>
+        <a href="how-to-play.html" class="header-nav-link">How to Play</a>
+        <a href="leaderboard.html" class="header-nav-link active">Leaderboard</a>
+      </nav>
+
+      <!-- Right Auth / Identity Group -->
+      <div class="header-auth-group" id="headerAuthGroup">
+        <a href="login.html" class="btn btn-secondary btn-sm" id="authBtn">Sign In</a>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content" style="flex-direction: column;">
+      
+      <section class="leaderboard-wrapper" aria-labelledby="leaderboard-heading">
+        
+        <div class="page-intro">
+          <div class="hero-pill">
+            <span>✦</span>
+            <span>Galactic Hall of Fame</span>
+            <span>✦</span>
+          </div>
+          <h1 id="leaderboard-heading" class="page-main-title">
+            Top Cosmic Navigators
+          </h1>
+          <p class="page-main-desc">
+            Universal rankings commemorating elite pilots who conquered the memory matrix.
+          </p>
+        </div>
+
+        <!-- Filter Navigation Tabs -->
+        <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard difficulty filters">
+          <button type="button" class="tab-btn is-active" data-filter="all" role="tab" aria-selected="true">
+            All Missions
+          </button>
+          <button type="button" class="tab-btn" data-filter="hard" role="tab" aria-selected="false">
+            Cosmic Ace (Hard)
+          </button>
+          <button type="button" class="tab-btn" data-filter="medium" role="tab" aria-selected="false">
+            Commander (Medium)
+          </button>
+          <button type="button" class="tab-btn" data-filter="easy" role="tab" aria-selected="false">
+            Cadet (Easy)
+          </button>
+        </div>
+
+        <!-- Leaderboard Table Container -->
+        <div class="leaderboard-table-card">
+          <div class="table-responsive">
+            <table class="leaderboard-table" aria-label="Leaderboard rankings">
+              <thead>
+                <tr>
+                  <th scope="col" class="th-rank">Rank</th>
+                  <th scope="col" class="th-explorer">Explorer Call Sign</th>
+                  <th scope="col" class="th-tier">Difficulty</th>
+                  <th scope="col" class="th-score">Score</th>
+                  <th scope="col" class="th-accuracy">Accuracy</th>
+                  <th scope="col" class="th-time">Time Left</th>
+                  <th scope="col" class="th-date">Mission Date</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardBody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State Container -->
+          <div id="emptyState" class="leaderboard-empty" style="display: none;">
+            <p>No mission records found for this difficulty tier.</p>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="leaderboard-bottom-bar">
+          <a href="difficulty.html" class="btn btn-primary btn-lg">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Launch New Mission</span>
+          </a>
+          <button type="button" class="btn btn-secondary btn-sm" id="resetLeaderboardBtn" title="Reset leaderboard scores to default pioneers">
+            Reset Sample Data
+          </button>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom Page Footer -->
+    <footer class="site-footer">
+      <nav class="footer-nav" aria-label="Auxiliary navigation">
+        <a href="index.html">Home</a>
+        <span>•</span>
+        <a href="how-to-play.html">How to Play</a>
+        <span>•</span>
+        <a href="difficulty.html">Difficulty</a>
+      </nav>
+    </footer>
+
+  </div>
+
+  <script src="js/home.js"></script>
+  <script src="js/leaderboard.js"></script>
+</body>
+</html>
+
