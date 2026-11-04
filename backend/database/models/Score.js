@@ -8,11 +8,22 @@ const mongoose = require('mongoose');
 
 const scoreSchema = new mongoose.Schema(
   {
+    ownerUsername: {
+      type: String,
+      required: [true, 'Score owner is required'],
+      trim: true,
+      maxlength: [20, 'Username cannot exceed 20 characters']
+    },
     callsign: {
       type: String,
       required: [true, 'Player callsign (name) is required'],
       trim: true,
       maxlength: [24, 'Callsign cannot exceed 24 characters']
+    },
+    outcome: {
+      type: String,
+      enum: ['win', 'lose'],
+      required: [true, 'Game outcome is required']
     },
     score: {
       type: Number,
