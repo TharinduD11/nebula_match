@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Form Submission & Validation ---
   if (loginForm) {
-    loginForm.addEventListener('submit', (event) => {
+    loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       hideAlert();
 
@@ -227,43 +227,54 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.classList.add('btn-loading');
       submitBtn.disabled = true;
       const btnText = submitBtn.querySelector('.btn-text-content');
-      if (btnText) btnText.textContent = 'Authenticating explorer...';
+      if (btnText) btnText.textContent = 'Verifying credentials...';
 
-      // Determine explorer Call Sign / Username & Email
       const trimmedId = identifierValue.trim();
       let username = trimmedId;
       let email = '';
-      if (trimmedId.includes('@')) {
-        email = trimmedId;
-        username = trimmedId.split('@')[0];
-      } else {
-        email = `${trimmedId.toLowerCase()}@nebula.io`;
-      }
+      let bestScore = 0;
+      let gamesPlayed = 0;
 
-      // Check if user account was previously registered in localStorage
-      let registeredAccounts = [];
+      // 1. Attempt real MongoDB Backend Authentication
       try {
-        const storedAccounts = localStorage.getItem('nebula_accounts');
-        if (storedAccounts) registeredAccounts = JSON.parse(storedAccounts);
-      } catch (err) {
-        registeredAccounts = [];
-      }
+        const apiBase = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '4000'))
+          ? 'http://localhost:4000'
+          : '';
+        const response = await fetch(`${apiBase}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier: trimmedId, password: passwordValue })
+        });
 
-      // If registered account exists, harmonize username and email
-      const matchedAccount = registeredAccounts.find(acc => 
-        (acc.email && acc.email.toLowerCase() === trimmedId.toLowerCase()) || 
-        (acc.username && acc.username.toLowerCase() === trimmedId.toLowerCase())
-      );
+        const data = await response.json();
 
-      if (matchedAccount) {
-        username = matchedAccount.username;
-        email = matchedAccount.email;
+        if (response.ok && data.success && data.user) {
+          username = data.user.username;
+          email = data.user.email;
+          bestScore = data.user.bestScore || 0;
+          gamesPlayed = data.user.gamesPlayed || 0;
+        } else {
+          // Authentication rejected by MongoDB
+          submitBtn.classList.remove('btn-loading');
+          submitBtn.disabled = false;
+          if (btnText) btnText.textContent = 'Sign In';
+          showAlert('error', data.message || 'Invalid username or password.');
+          return;
+        }
+      } catch (networkErr) {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
+        if (btnText) btnText.textContent = 'Sign In';
+        showAlert('error', 'Cannot connect to database server. Please ensure the backend is running.');
+        return;
       }
 
       // Construct Virtual Identity session object
       const explorerSession = {
         username: username,
         email: email,
+        bestScore: bestScore,
+        gamesPlayed: gamesPlayed,
         isAuthenticated: true,
         loginTime: new Date().toISOString()
       };
@@ -280,39 +291,53 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnText) btnText.textContent = 'Access Granted ✓';
         showAlert(
           'success', 
-          `Welcome back, ${username}! Navigating to Mission Control...`
+          `Welcome, ${username}! Logging in to Nebula Match...`
         );
 
         setTimeout(() => {
           window.location.href = redirectTarget;
         }, 500);
-      }, 400);
+      }, 350);
     });
   }
 
-  // --- Active Session Detection ---
-  try {
-    const existingSession = localStorage.getItem('nebula_user');
-    if (existingSession) {
-      const activeUser = JSON.parse(existingSession);
-      if (activeUser && activeUser.username) {
-        showAlert(
-          'info',
-          `Currently signed in as ${activeUser.username}. Enter new credentials to switch accounts, or return to Mission Control via the logo.`
-        );
-      }
+  // --- Registration Callback & Active Session Detection ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const registeredParam = urlParams.get('registered');
+  const userParam = urlParams.get('user');
+
+  if (registeredParam && userParam) {
+    if (identifierInput) {
+      identifierInput.value = userParam;
     }
-  } catch (err) {
-    // Non-blocking catch
+    showAlert('success', `Account created! Please enter your password to sign in as ${userParam}.`);
+    if (passwordInput) {
+      passwordInput.focus();
+    }
+  } else {
+    try {
+      const existingSession = localStorage.getItem('nebula_user');
+      if (existingSession) {
+        const activeUser = JSON.parse(existingSession);
+        if (activeUser && activeUser.username) {
+          showAlert(
+            'info',
+            `Currently signed in as ${activeUser.username}. Enter credentials to switch accounts.`
+          );
+        }
+      }
+    } catch (err) {
+      // Non-blocking catch
+    }
   }
 
-  // --- Placeholder Links Guidance (Stage boundaries preserved) ---
+  // --- Password Help Link ---
   if (forgotPasswordLink) {
     forgotPasswordLink.addEventListener('click', (e) => {
       e.preventDefault();
       showAlert(
         'info', 
-        'Password recovery will be connected during backend authentication in Stage 4.'
+        'To reset your password, please sign up for a new account or contact support.'
       );
     });
   }

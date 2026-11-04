@@ -13,11 +13,13 @@ const { getFishChallenge, verifyFishAnswer } = require('../services/fishService'
 // GET /api/fish/challenge
 router.get('/challenge', async (req, res) => {
   try {
-    const puzzle = await getFishChallenge();
+    const mode = req.query.mode || 'clean';
+    const puzzle = await getFishChallenge(mode);
     res.json({
       success: true,
       question: puzzle.question,
       solution: puzzle.solution,
+      fish: puzzle.solution,
       source: puzzle.source,
       message: 'Quest is ready.'
     });

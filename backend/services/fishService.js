@@ -1,86 +1,88 @@
 /**
- * Nebula Match — Fish Game API Service
+ * Nebula Match — The Fish Game API Service
  * 
- * Interoperability service for the 'Fish Game' API:
- * Reference: https://marcconrad.com/uob/fish/doc.php
- * 
- * Responsibilities:
- * - Queries the external Fish Game API (https://marcconrad.com/uob/fish/api.php)
- * - Implements graceful fallback to autonomous Fish Quest generator if API is offline
- * - Validates explorer puzzle answers
+ * Recreates the canonical Fish Game challenge:
+ * - Generates clear, high-resolution, unambiguous fish counting puzzles
+ *   matching the prototype specification (https://marcconrad.com/uob/fish/doc.php)
+ * - Generates clean line-art fish with generous spacing so fish never overlap
+ * - Optional remote Marc Conrad API support with correct 'fish' attribute mapping
+ * - Validates user solution and calculates chronometer bonus time (+15s)
  */
-
-const FISH_API_ENDPOINTS = [
-  'https://marcconrad.com/uob/fish/api.php?out=json',
-  'https://marcconrad.com/uob/fish/api.php',
-  'https://marcconrad.com/uob/banana/api.php?out=json'
-];
 
 /**
- * Generate a procedural high-resolution SVG fish puzzle matching the
- * canonical Fish Game API image structure when offline or in sandbox mode.
+ * Generate a clean, crystal-clear SVG fish counting puzzle.
+ * Directly matches the prototype design with clearly distinguishable fish.
  * 
- * @param {number} fishCount Optional count (2-8)
- * @returns {{ question: string, solution: number }}
+ * @param {number|null} [fishCount=null] Optional fish count (3-7)
+ * @returns {{ question: string, solution: number, count: number, source: string, message: string }}
  */
 function generateProceduralFishPuzzle(fishCount = null) {
-  const count = fishCount !== null ? fishCount : Math.floor(Math.random() * 7) + 2; // 2 to 8 fish
+  // Generate between 3 and 7 clearly countable fish
+  const count = fishCount !== null ? fishCount : Math.floor(Math.random() * 5) + 3;
   const width = 640;
-  const height = 360;
+  const height = 340;
 
-  // Generate non-overlapping positions
+  // Placement with generous distance checking to prevent overlapping
   const positions = [];
-  const minDistance = 90;
+  const minDistance = 110;
 
   for (let i = 0; i < count; i++) {
     let placed = false;
     let attempts = 0;
-    while (!placed && attempts < 100) {
+    while (!placed && attempts < 150) {
       attempts++;
-      const x = Math.floor(Math.random() * (width - 160)) + 80;
+      const x = Math.floor(Math.random() * (width - 180)) + 90;
       const y = Math.floor(Math.random() * (height - 120)) + 60;
-      const scale = 0.85 + Math.random() * 0.3; // subtle size variety
+      const scale = 0.92 + Math.random() * 0.18;
+      const flip = Math.random() > 0.4 ? 1 : -1;
 
       const isTooClose = positions.some(p => {
         const dx = p.x - x;
         const dy = p.y - y;
-        return Math.sqrt(dx * dx + dy * dy) < minDistance;
+        return Math.hypot(dx, dy) < minDistance;
       });
 
       if (!isTooClose) {
-        positions.push({ x, y, scale });
+        positions.push({ x, y, scale, flip });
         placed = true;
       }
     }
-    // Fallback if space is crowded
+
+    // Grid fallback if random placement takes too many attempts
     if (!placed) {
+      const col = i % 3;
+      const row = Math.floor(i / 3);
       positions.push({
-        x: 80 + (i % 3) * 180,
-        y: 80 + Math.floor(i / 3) * 100,
-        scale: 0.9
+        x: 130 + col * 190,
+        y: 80 + row * 110,
+        scale: 1,
+        flip: 1
       });
     }
   }
 
-  // Generate SVG fish elements (clean minimal line art matching Image 3)
+  // Draw clean minimal fish line art matching Image 3 in assignment
   const fishSvgElements = positions.map((p, idx) => {
+    const sx = (p.scale * p.flip).toFixed(2);
+    const sy = p.scale.toFixed(2);
     return `
-      <g transform="translate(${p.x}, ${p.y}) scale(${p.scale.toFixed(2)})">
+      <!-- Fish #${idx + 1} -->
+      <g transform="translate(${p.x}, ${p.y}) scale(${sx}, ${sy})">
         <!-- Fish Body Outline -->
-        <path d="M -40,0 C -25,-22 20,-22 35,0 C 20,22 -25,22 -40,0 Z" 
-              fill="#ffffff" stroke="#1e293b" stroke-width="3.5" stroke-linejoin="round" />
+        <path d="M -38,0 C -24,-20 20,-20 34,0 C 20,20 -24,20 -38,0 Z" 
+              fill="#ffffff" stroke="#0f172a" stroke-width="3.2" stroke-linejoin="round" />
         <!-- Fish Tail Fin -->
-        <path d="M 33,-2 L 52,-18 L 48,0 L 52,18 L 33,2 Z" 
-              fill="#ffffff" stroke="#1e293b" stroke-width="3.5" stroke-linejoin="round" />
+        <path d="M 30,-2 L 50,-16 L 46,0 L 50,16 L 30,2 Z" 
+              fill="#ffffff" stroke="#0f172a" stroke-width="3.2" stroke-linejoin="round" />
         <!-- Fish Eye -->
-        <circle cx="-22" cy="-5" r="3.2" fill="#1e293b" />
+        <circle cx="-18" cy="-5" r="3.2" fill="#0f172a" />
       </g>
     `;
   }).join('\n');
 
   const fullSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="100%">
-      <rect width="${width}" height="${height}" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3" />
+      <rect width="${width}" height="${height}" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5" />
       ${fishSvgElements}
     </svg>
   `.trim();
@@ -92,59 +94,57 @@ function generateProceduralFishPuzzle(fishCount = null) {
   return {
     question: dataUri,
     solution: count,
-    source: 'autonomous-fish-engine'
+    fish: count,
+    count: count,
+    source: 'fish-game-engine',
+    message: 'Quest is ready.'
   };
 }
 
 /**
- * Fetch a new Fish Game challenge from the live API or generate one offline.
- * @returns {Promise<{ success: boolean, question: string, solution: number, source: string }>}
+ * Fetch a fish challenge.
+ * Returns the clear, understandable fish counting challenge.
+ * 
+ * @param {string} [mode] Optional mode ('clean' or 'remote')
+ * @returns {Promise<{ success: boolean, question: string, solution: number, fish: number, source: string, message: string }>}
  */
-async function getFishChallenge() {
-  // Try remote Fish API endpoints first
-  for (const endpoint of FISH_API_ENDPOINTS) {
+async function getFishChallenge(mode = 'clean') {
+  if (mode === 'remote') {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-      const response = await fetch(endpoint, {
+      const response = await fetch('https://marcconrad.com/uob/fish/api.php?out=json', {
         signal: controller.signal,
         headers: { 'Accept': 'application/json' }
       });
       clearTimeout(timeoutId);
 
       if (response.ok) {
-        const text = await response.text();
-        let data = null;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          // If returned CSV format (e.g. url,solution)
-          const parts = text.trim().split(',');
-          if (parts.length >= 2 && !isNaN(Number(parts[1]))) {
-            data = { question: parts[0], solution: Number(parts[1]) };
-          }
-        }
-
-        if (data && data.question && (data.solution !== undefined && data.solution !== null)) {
+        const data = await response.json();
+        // Marc Conrad's Fish API uses 'fish' property for the answer
+        const solution = data.fish !== undefined ? Number(data.fish) : Number(data.solution);
+        if (data && data.question && !isNaN(solution)) {
           return {
             success: true,
             question: data.question,
-            solution: Number(data.solution),
-            source: 'marcconrad-fish-api'
+            solution: solution,
+            fish: solution,
+            source: 'marcconrad-fish-api',
+            message: 'Quest is ready.'
           };
         }
       }
     } catch (err) {
-      // Continue to next endpoint or fallback
+      console.warn('[Fish Service] Remote API failed, using clean fish puzzle generator.');
     }
   }
 
-  // Graceful fallback to built-in procedural engine
-  const fallback = generateProceduralFishPuzzle();
+  // Generate crystal-clear, unambiguous fish counting challenge
+  const puzzle = generateProceduralFishPuzzle();
   return {
     success: true,
-    ...fallback
+    ...puzzle
   };
 }
 
@@ -163,4 +163,3 @@ module.exports = {
   generateProceduralFishPuzzle,
   verifyFishAnswer
 };
-

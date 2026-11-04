@@ -13,6 +13,20 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- 0. Strict Auth Guard ---
+  const userJson = localStorage.getItem('nebula_user');
+  let authUser = null;
+  try {
+    if (userJson) authUser = JSON.parse(userJson);
+  } catch (e) {
+    localStorage.removeItem('nebula_user');
+  }
+
+  if (!authUser || !authUser.username || !authUser.isAuthenticated) {
+    window.location.replace('login.html?redirect=game.html');
+    return;
+  }
+
   // --- 1. Audio Synthesizer (Web Audio API) ---
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let audioCtx = null;
@@ -91,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Header controls & badges
   const soundToggleBtn = document.getElementById('soundToggleBtn');
-  const pauseBtn = document.getElementById('pauseBtn');
   const hudUserBadge = document.getElementById('hudUserBadge');
   const hudUserAvatar = document.getElementById('hudUserAvatar');
   const hudUsername = document.getElementById('hudUsername');
@@ -102,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const restartBtn = document.getElementById('restartBtn');
   const bottomPauseBtn = document.getElementById('bottomPauseBtn');
   const bottomRestartBtn = document.getElementById('bottomRestartBtn');
-  const bottomBonusTimeBtn = document.getElementById('bottomBonusTimeBtn');
 
   const starChallengeModal = document.getElementById('starChallengeModal');
   const fishPictureCard = document.getElementById('fishPictureCard');
@@ -123,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const DIFFICULTY_MAP = {
     easy: {
       key: 'easy',
-      name: 'Cadet Tier',
+      name: 'Easy',
       cols: 4,
       totalPairs: 6,
       timeLimit: 60,
@@ -131,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     medium: {
       key: 'medium',
-      name: 'Commander Tier',
+      name: 'Medium',
       cols: 4,
       totalPairs: 8,
       timeLimit: 45,
@@ -139,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     hard: {
       key: 'hard',
-      name: 'Cosmic Ace Tier',
+      name: 'Hard',
       cols: 5,
       totalPairs: 10,
       timeLimit: 35,
@@ -290,6 +302,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } catch (e) {
     // Non-blocking
+  }
+
+  const gameSignOutBtn = document.getElementById('gameSignOutBtn');
+  if (gameSignOutBtn) {
+    gameSignOutBtn.addEventListener('click', () => {
+      localStorage.removeItem('nebula_user');
+      window.location.href = 'login.html';
+    });
   }
 
   // --- 6. Game State Variables ---
@@ -537,28 +557,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }, isVictory ? 1200 : 800);
   }
 
-  // --- 12. Fish Game API Interoperability (Bonus Time Quest) ---
+  // --- 12. Fish Game API Interoperability (Bonus Time Quest - 1 Time Only) ---
   let activeFishSolution = null;
+
+  function disableBonusTimeButtons() {
+    starChallengeUsed = true;
+
+    // 1. HUD button
+    if (starTriggerBtn) {
+      starTriggerBtn.classList.add('is-exhausted');
+      starTriggerBtn.disabled = true;
+      starTriggerBtn.setAttribute('aria-disabled', 'true');
+      const title = starTriggerBtn.querySelector('.star-btn-title');
+      const sub = starTriggerBtn.querySelector('.star-btn-sub');
+      if (title) title.textContent = 'Bonus Used';
+      if (sub) sub.textContent = 'Already claimed (1/1)';
+    }
+
+  }
+
+  function resetBonusTimeButtons() {
+    starChallengeUsed = false;
+
+    // 1. HUD button
+    if (starTriggerBtn) {
+      starTriggerBtn.classList.remove('is-exhausted');
+      starTriggerBtn.disabled = false;
+      starTriggerBtn.removeAttribute('aria-disabled');
+      const title = starTriggerBtn.querySelector('.star-btn-title');
+      const sub = starTriggerBtn.querySelector('.star-btn-sub');
+      if (title) title.textContent = 'Bonus Time';
+      if (sub) sub.textContent = '+15s (1x only)';
+    }
+
+  }
 
   /**
    * Client-side procedural SVG fish generator matching Image 3
    * Ensures the puzzle works seamlessly offline or when API is unreachable.
    */
   function createLocalFishPuzzle() {
-    const count = Math.floor(Math.random() * 6) + 3; // 3 to 8 fish
+    const count = Math.floor(Math.random() * 5) + 3; // 3 to 7 fish
     const width = 640;
     const height = 340;
     const positions = [];
-    const minDistance = 85;
+    const minDistance = 110;
 
     for (let i = 0; i < count; i++) {
       let placed = false;
       let tries = 0;
-      while (!placed && tries < 80) {
+      while (!placed && tries < 100) {
         tries++;
-        const x = Math.floor(Math.random() * (width - 160)) + 80;
-        const y = Math.floor(Math.random() * (height - 110)) + 55;
-        const scale = 0.85 + Math.random() * 0.25;
+        const x = Math.floor(Math.random() * (width - 180)) + 90;
+        const y = Math.floor(Math.random() * (height - 120)) + 60;
+        const scale = 0.92 + Math.random() * 0.18;
+        const flip = Math.random() > 0.4 ? 1 : -1;
 
         const tooClose = positions.some(p => {
           const dx = p.x - x;
@@ -567,22 +620,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (!tooClose) {
-          positions.push({ x, y, scale });
+          positions.push({ x, y, scale, flip });
           placed = true;
         }
       }
       if (!placed) {
-        positions.push({ x: 80 + (i % 3) * 170, y: 70 + Math.floor(i / 3) * 90, scale: 0.9 });
+        const col = i % 3;
+        const row = Math.floor(i / 3);
+        positions.push({ x: 120 + col * 180, y: 80 + row * 110, scale: 1, flip: 1 });
       }
     }
 
-    const fishNodes = positions.map(p => `
-      <g transform="translate(${p.x}, ${p.y}) scale(${p.scale.toFixed(2)})">
-        <path d="M -38,0 C -24,-20 18,-20 32,0 C 18,20 -24,20 -38,0 Z" fill="#ffffff" stroke="#1e293b" stroke-width="3" stroke-linejoin="round" />
-        <path d="M 30,-2 L 48,-16 L 45,0 L 48,16 L 30,2 Z" fill="#ffffff" stroke="#1e293b" stroke-width="3" stroke-linejoin="round" />
-        <circle cx="-20" cy="-5" r="3" fill="#1e293b" />
+    const fishNodes = positions.map((p, idx) => {
+      const sx = (p.scale * p.flip).toFixed(2);
+      const sy = p.scale.toFixed(2);
+      return `
+      <!-- Fish #${idx + 1} -->
+      <g transform="translate(${p.x}, ${p.y}) scale(${sx}, ${sy})">
+        <!-- Fish Body matching Image 3 -->
+        <path d="M -38,0 C -24,-20 20,-20 34,0 C 20,20 -24,20 -38,0 Z" fill="#ffffff" stroke="#0f172a" stroke-width="3" stroke-linejoin="round" />
+        <!-- Fish Tail matching Image 3 -->
+        <path d="M 30,-2 L 50,-16 L 46,0 L 50,16 L 30,2 Z" fill="#ffffff" stroke="#0f172a" stroke-width="3" stroke-linejoin="round" />
+        <!-- Eye matching Image 3 -->
+        <circle cx="-18" cy="-5" r="3.2" fill="#0f172a" />
       </g>
-    `).join('\n');
+      `;
+    }).join('\n');
 
     const svg = `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="100%">
@@ -593,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return {
       question: `data:image/svg+xml;base64,${btoa(svg)}`,
-      solution: count,
+      solution: positions.length,
       source: 'local-fish-engine'
     };
   }
@@ -609,7 +672,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fishFeedback) fishFeedback.innerHTML = '';
     if (fishTryAgainBtn) fishTryAgainBtn.style.display = 'none';
     if (fishCountInput) {
-      fishCountInput.value = '';
+      fishCountInput.value = '0';
       fishCountInput.disabled = false;
     }
     if (fishSubmitBtn) fishSubmitBtn.disabled = false;
@@ -619,7 +682,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Try backend proxy route first
     try {
-      const res = await fetch('/api/fish/challenge');
+      const apiBase = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '4000'))
+        ? 'http://localhost:4000'
+        : '';
+      const res = await fetch(`${apiBase}/api/fish/challenge`);
       if (res.ok) {
         const data = await res.json();
         if (data.success && data.question && data.solution !== undefined) {
@@ -630,26 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Backend not running or unreachable
     }
 
-    // 2. Try direct Marc Conrad API if running static frontend
-    if (!puzzle) {
-      try {
-        const res = await fetch('https://marcconrad.com/uob/fish/api.php?out=json');
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.question && data.solution !== undefined) {
-            puzzle = {
-              question: data.question,
-              solution: Number(data.solution),
-              source: 'marcconrad-fish-api'
-            };
-          }
-        }
-      } catch (err) {
-        // CORS or offline
-      }
-    }
-
-    // 3. Fallback to client-side procedural engine
+    // 2. Direct clean fallback or client generator
     if (!puzzle) {
       puzzle = createLocalFishPuzzle();
     }
@@ -661,23 +708,31 @@ document.addEventListener('DOMContentLoaded', () => {
       fishLoading.style.display = 'none';
       fishImg.style.display = 'block';
       if (fishQuestStatus) {
-        fishQuestStatus.textContent = 'Quest is ready.';
+        const sourceLabel = puzzle.source === 'marcconrad-fish-api' ? 'Live API Feed • Quest Ready' : 'Quest is ready.';
+        fishQuestStatus.textContent = sourceLabel;
       }
       if (fishCountInput) fishCountInput.focus();
     };
     fishImg.onerror = () => {
-      // In case image URL fails to load, use SVG fallback
       const fallback = createLocalFishPuzzle();
       activeFishSolution = fallback.solution;
       fishImg.src = fallback.question;
       fishLoading.style.display = 'none';
       fishImg.style.display = 'block';
+      if (fishQuestStatus) fishQuestStatus.textContent = 'Quest is ready.';
     };
     fishImg.src = puzzle.question;
+
+    // Safety check for cached data URL
+    if (fishImg.complete && fishImg.naturalWidth > 0) {
+      fishLoading.style.display = 'none';
+      fishImg.style.display = 'block';
+    }
   }
 
   function openStarChallenge() {
-    if (!isGameActive) return;
+    // Strictly 1-time only per game session
+    if (starChallengeUsed || !isGameActive) return;
     isPaused = true;
 
     if (starChallengeModal) {
@@ -722,10 +777,8 @@ document.addEventListener('DOMContentLoaded', () => {
         bonusTimeClaimed += 15;
         updateTimerDisplay();
 
-        // Highlight bonus time button
-        if (bottomBonusTimeBtn) {
-          bottomBonusTimeBtn.classList.add('btn-bonus-awarded');
-        }
+        // Strictly mark bonus time as USED (1 time only per game)
+        disableBonusTimeButtons();
 
         setTimeout(() => {
           closeStarChallengeModal();
@@ -753,10 +806,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Connect In-game Bonus Time buttons
-  if (bottomBonusTimeBtn) {
-    bottomBonusTimeBtn.addEventListener('click', openStarChallenge);
+  // Interactive Stepper Buttons (- and +)
+  const fishMinusBtn = document.getElementById('fishMinusBtn');
+  const fishPlusBtn = document.getElementById('fishPlusBtn');
+
+  if (fishMinusBtn && fishCountInput) {
+    fishMinusBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      let val = parseInt(fishCountInput.value, 10);
+      if (isNaN(val) || val <= 0) val = 0;
+      else val -= 1;
+      fishCountInput.value = val;
+    });
   }
+  if (fishPlusBtn && fishCountInput) {
+    fishPlusBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      let val = parseInt(fishCountInput.value, 10);
+      if (isNaN(val) || val < 0) val = 0;
+      if (val < 25) val += 1;
+      fishCountInput.value = val;
+    });
+  }
+
+  // Connect in-game pause and restart controls
   if (bottomPauseBtn) {
     bottomPauseBtn.addEventListener('click', togglePause);
   }
@@ -789,6 +862,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isGameActive) return;
     isPaused = !isPaused;
 
+    if (bottomPauseBtn) {
+      if (isPaused) {
+        bottomPauseBtn.classList.add('is-paused');
+        bottomPauseBtn.title = 'Resume Game';
+        bottomPauseBtn.innerHTML = `
+          <span class="btn-dock-icon play-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </span>
+          <span class="btn-dock-label" id="pauseBtnLabel">Resume</span>
+        `;
+      } else {
+        bottomPauseBtn.classList.remove('is-paused');
+        bottomPauseBtn.title = 'Pause Game';
+        bottomPauseBtn.innerHTML = `
+          <span class="btn-dock-icon pause-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16" rx="1.5"></rect>
+              <rect x="14" y="4" width="4" height="16" rx="1.5"></rect>
+            </svg>
+          </span>
+          <span class="btn-dock-label" id="pauseBtnLabel">Pause</span>
+        `;
+      }
+    }
+
     if (pauseModal) {
       if (isPaused) {
         pauseModal.removeAttribute('hidden');
@@ -800,7 +900,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  if (pauseBtn) pauseBtn.addEventListener('click', togglePause);
   if (resumeBtn) resumeBtn.addEventListener('click', togglePause);
 
   if (restartBtn) {
@@ -816,11 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
       starChallengeUsed = false;
       flippedCards = [];
       isBoardLocked = false;
-      if (starTriggerBtn) {
-        starTriggerBtn.classList.remove('is-exhausted');
-        starTriggerBtn.disabled = false;
-        starTriggerBtn.querySelector('.star-btn-sub').textContent = '+15s Math Decryption';
-      }
+      resetBonusTimeButtons();
       initBoard();
       startTimer();
     });
@@ -848,11 +943,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- 15. Check for Claimed Bonus Time (from standalone challenge.html) ---
   const claimedBonus = sessionStorage.getItem('nebula_bonus_claimed');
-  if (claimedBonus) {
+  if (claimedBonus && !starChallengeUsed) {
     const extraSeconds = Number(claimedBonus) || 15;
     timeRemaining += extraSeconds;
     maxTime += extraSeconds;
     bonusTimeClaimed += extraSeconds;
+    disableBonusTimeButtons();
     sessionStorage.removeItem('nebula_bonus_claimed');
   }
 

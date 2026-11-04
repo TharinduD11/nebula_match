@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nebula Match — Live Cosmic Memory Grid. Flip cards, match space targets, and solve emergency math challenges.">
-  <title>Mission in Progress — Nebula Match</title>
+  <meta name="description" content="Nebula Match — Flip cards, match pairs, and solve quick fish challenges for bonus time.">
+  <title>Play Game — Nebula Match</title>
   
   <!-- Shared Design System & Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -32,7 +32,7 @@
           <span>Nebula Match</span>
         </a>
         <div class="mission-tier-pill" id="tierDisplayPill">
-          <span>Commander Tier</span>
+          <span>Medium</span>
         </div>
       </div>
 
@@ -46,23 +46,39 @@
           </svg>
         </button>
 
-        <!-- Pause Button -->
-        <button type="button" class="hud-icon-btn" id="pauseBtn" aria-label="Pause Mission" title="Pause Game">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="6" y="4" width="4" height="16"></rect>
-            <rect x="14" y="4" width="4" height="16"></rect>
-          </svg>
-        </button>
 
-        <!-- Active Explorer Badge -->
+        <!-- Active Explorer Badge & Sign Out -->
         <div class="header-auth-group" id="headerAuthGroup">
           <div class="user-badge" id="hudUserBadge">
             <span class="user-badge-avatar" id="hudUserAvatar">E</span>
             <span id="hudUsername">Explorer</span>
           </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="gameSignOutBtn" title="Sign out of your account">Sign Out</button>
         </div>
       </div>
     </header>
+
+    <!-- In-Game Action Dock (kept above the game board) -->
+    <div class="game-controls-dock" role="toolbar" aria-label="Game controls">
+      <button type="button" class="btn-dock btn-dock-pause" id="bottomPauseBtn" aria-label="Pause or resume game" title="Pause Game">
+        <span class="btn-dock-icon pause-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="1.5"></rect>
+            <rect x="14" y="4" width="4" height="16" rx="1.5"></rect>
+          </svg>
+        </span>
+        <span class="btn-dock-label" id="pauseBtnLabel">Pause</span>
+      </button>
+      <button type="button" class="btn-dock btn-dock-restart" id="bottomRestartBtn" aria-label="Restart game" title="Restart Game">
+        <span class="btn-dock-icon restart-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <polyline points="3 3 3 8 8 8"></polyline>
+          </svg>
+        </span>
+        <span class="btn-dock-label">Restart</span>
+      </button>
+    </div>
 
     <!-- Main Game Arena -->
     <main class="game-arena">
@@ -72,7 +88,7 @@
         
         <!-- Timer Module -->
         <div class="hud-card hud-timer-card" id="hudTimerCard">
-          <div class="hud-label">Chronometer</div>
+          <div class="hud-label">Time</div>
           <div class="hud-timer-wrap">
             <span class="hud-timer-digits" id="timerDigits">45</span>
             <span class="hud-timer-unit">s</span>
@@ -85,7 +101,7 @@
 
         <!-- Score & Combo Module -->
         <div class="hud-card hud-score-card">
-          <div class="hud-label">Mission Score</div>
+          <div class="hud-label">Score</div>
           <div class="hud-score-val" id="scoreValue">0</div>
           <div class="hud-streak-badge" id="streakBadge" style="display: none;">
             <span id="streakCount">2×</span> Streak
@@ -94,7 +110,7 @@
 
         <!-- Targets Matched Module -->
         <div class="hud-card hud-progress-card">
-          <div class="hud-label">Cosmic Signatures</div>
+          <div class="hud-label">Pairs Matched</div>
           <div class="hud-pairs-val">
             <span id="pairsMatched">0</span>
             <span class="hud-pairs-divider">/</span>
@@ -103,44 +119,28 @@
           <div class="hud-sub-label" id="flipsCount">Moves: 0</div>
         </div>
 
-        <!-- Bonus Time Button (Fish Game API Interoperability) -->
+        <!-- Bonus Time Button (Fish Game API - 1 Time Only) -->
         <div class="hud-card hud-star-card">
-          <button type="button" class="star-trigger-btn" id="starTriggerBtn" title="Initiate Fish Game API Challenge for +15s Bonus Time">
+          <button type="button" class="star-trigger-btn" id="starTriggerBtn" title="Count fish to get +15s bonus time (1 time only)">
             <div class="star-glow-effect" aria-hidden="true"></div>
             <svg class="star-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
             <div class="star-btn-info">
               <span class="star-btn-title">Bonus Time</span>
-              <span class="star-btn-sub">+15s Fish Game API</span>
+              <span class="star-btn-sub">+15s (1x only)</span>
             </div>
           </button>
         </div>
 
       </section>
 
-      <!-- The 3D Memory Card Matrix -->
-      <section class="board-container" aria-label="Cosmic Memory Grid">
-        <div class="memory-grid" id="memoryGrid" role="grid" aria-label="Memory Card Matrix">
+      <!-- The 3D Memory Card Grid -->
+      <section class="board-container" aria-label="Memory Card Grid">
+        <div class="memory-grid" id="memoryGrid" role="grid" aria-label="Card Grid">
           <!-- Dynamically injected via JavaScript -->
         </div>
       </section>
-
-      <!-- In-Game Action Bar -->
-      <div class="game-controls-bar">
-        <button type="button" class="btn btn-secondary" id="bottomPauseBtn">
-          <span>Pause</span>
-        </button>
-        <button type="button" class="btn btn-secondary" id="bottomRestartBtn">
-          <span>Restart</span>
-        </button>
-        <button type="button" class="btn btn-primary btn-bonus-time" id="bottomBonusTimeBtn">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-          <span>Bonus Time</span>
-        </button>
-      </div>
 
     </main>
 
@@ -153,13 +153,24 @@
             <rect x="14" y="4" width="4" height="16"></rect>
           </svg>
         </div>
-        <h2 class="modal-title">Mission Paused</h2>
-        <p class="modal-desc">Expedition clock frozen. Ready to resume exploration?</p>
+        <h2 class="modal-title">Game Paused</h2>
+        <p class="modal-desc">The timer is stopped. Resume whenever you're ready.</p>
         <div class="modal-actions">
-          <button type="button" class="btn btn-primary btn-block" id="resumeBtn">Resume Mission</button>
-          <button type="button" class="btn btn-secondary btn-block" id="restartBtn">Restart Mission</button>
+          <button type="button" class="btn btn-primary btn-block" id="resumeBtn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Resume Game</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-block" id="restartBtn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <polyline points="3 3 3 8 8 8"></polyline>
+            </svg>
+            <span>Restart Game</span>
+          </button>
           <a href="difficulty.html" class="btn btn-secondary btn-block">Change Difficulty</a>
-          <a href="index.html" class="label-link" style="margin-top: 8px;">Abort to Home</a>
+          <a href="index.html" class="label-link" style="margin-top: 8px;">Back to Home</a>
         </div>
       </div>
     </div>
@@ -168,46 +179,82 @@
     <div class="game-modal-overlay" id="starChallengeModal" hidden aria-hidden="true" role="dialog" aria-modal="true">
       <div class="game-modal-card game-modal-card--fish">
         
+        <!-- Modal Top Bar -->
         <header class="fish-modal-header">
-          <div class="fish-title-group">
-            <h2 class="modal-title" style="margin-bottom: 2px;">The Fish Game</h2>
-            <span class="fish-api-tag">Fish Game API • marcconrad.com/uob/fish</span>
+          <div class="fish-header-left">
+            <div class="fish-pill-badge">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              <span>Fish Game API Integration</span>
+            </div>
+            <h2 class="fish-modal-title" id="fishModalTitle">The Fish Game</h2>
+            <div class="fish-api-link-wrap">
+              <span class="fish-api-source" id="fishApiSource">Connected: marcconrad.com/uob/fish</span>
+              <a href="https://marcconrad.com/uob/fish/doc.php" target="_blank" rel="noopener" class="fish-doc-pill" title="View Official API Documentation">API Docs ↗</a>
+            </div>
           </div>
-          <span class="challenge-reward">+15s Bonus Time</span>
+          <div class="fish-header-right">
+            <div class="reward-capsule">
+              <span class="reward-icon">✦</span>
+              <span class="reward-text">+15s Bonus Time</span>
+            </div>
+          </div>
         </header>
 
-        <!-- Picture Display Box (matching Image 3) -->
-        <div class="fish-picture-card" id="fishPictureCard">
-          <div class="fish-loading" id="fishLoading">
-            <span class="btn-spinner" aria-hidden="true"></span>
-            <span>Fetching Quest from Fish Game API...</span>
+        <!-- macOS / visionOS Style Stage Container -->
+        <div class="fish-canvas-window">
+          <div class="fish-window-bar">
+            <div class="window-controls" aria-hidden="true">
+              <span class="w-dot w-dot-close"></span>
+              <span class="w-dot w-dot-min"></span>
+              <span class="w-dot w-dot-max"></span>
+            </div>
+            <div class="window-title">Quest Canvas — Live Feed</div>
+            <div class="window-chip" id="fishQuestStatus">Quest is ready</div>
           </div>
-          <img id="fishImg" class="fish-img" alt="Fish Game API Puzzle" style="display: none;" />
+
+          <!-- Picture Display Box -->
+          <div class="fish-picture-card" id="fishPictureCard">
+            <div class="fish-loading" id="fishLoading">
+              <span class="btn-spinner" aria-hidden="true"></span>
+              <span>Fetching Quest from Fish Game API...</span>
+            </div>
+            <img id="fishImg" class="fish-img" alt="Fish Game API Puzzle" style="display: none;" />
+          </div>
         </div>
 
-        <!-- Quest Status Label -->
-        <div class="fish-quest-status" id="fishQuestStatus">
-          Quest is ready.
-        </div>
-
-        <!-- Form: Enter the number of fish in the picture -->
+        <!-- Quest Question & Stepper Form -->
         <form id="fishGameForm" class="fish-game-form" novalidate>
-          <label for="fishCountInput" class="fish-input-label">
-            Enter the number of fish in the picture:
-          </label>
+          <div class="fish-question-prompt">
+            <label for="fishCountInput" class="fish-prompt-label">
+              Enter the number of fish in the picture:
+            </label>
+            <span class="fish-prompt-sub">Count the fish swimming in the canvas above.</span>
+          </div>
+
           <div class="fish-input-row">
-            <input 
-              type="number" 
-              id="fishCountInput" 
-              class="form-input fish-number-input" 
-              min="0" 
-              max="25" 
-              step="1" 
-              placeholder="0" 
-              required 
-              autocomplete="off" />
-            <button type="submit" id="fishSubmitBtn" class="btn btn-primary">
-              Submit
+            <!-- Stepper Capsule -->
+            <div class="fish-stepper-capsule">
+              <button type="button" class="stepper-btn stepper-btn--minus" id="fishMinusBtn" aria-label="Decrease fish count">−</button>
+              <input 
+                type="number" 
+                id="fishCountInput" 
+                class="fish-number-input" 
+                min="0" 
+                max="25" 
+                step="1" 
+                value="0" 
+                placeholder="0"
+                required 
+                autocomplete="off" />
+              <button type="button" class="stepper-btn stepper-btn--plus" id="fishPlusBtn" aria-label="Increase fish count">+</button>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="fishSubmitBtn" class="btn btn-submit">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Submit</span>
             </button>
           </div>
         </form>
@@ -218,10 +265,14 @@
         <!-- Action Controls -->
         <div class="fish-actions-row">
           <button type="button" class="btn btn-secondary btn-sm" id="fishTryAgainBtn" style="display: none;">
-            Try Again
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <polyline points="3 3 3 8 8 8"></polyline>
+            </svg>
+            <span>Try Another Puzzle</span>
           </button>
           <button type="button" class="btn btn-secondary btn-sm" id="closeChallengeBtn">
-            Back to game
+            <span>Back to Game</span>
           </button>
         </div>
 

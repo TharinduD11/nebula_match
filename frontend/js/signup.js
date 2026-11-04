@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Form Submission ---
   if (signupForm) {
-    signupForm.addEventListener('submit', (e) => {
+    signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       hideAlert();
 
@@ -334,7 +334,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (uError || eError || pError || cError) {
         showAlert('error', 'Please resolve the highlighted fields to continue.');
 
-        // Focus first field with an error
         if (uError && usernameInput) usernameInput.focus();
         else if (eError && emailInput) emailInput.focus();
         else if (pError && passwordInput) passwordInput.focus();
@@ -342,51 +341,61 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // --- Account Creation & Virtual Identity Session (Client Storage) ---
+      // --- Account Creation & Virtual Identity Session (MongoDB Backend) ---
       submitBtn.classList.add('btn-loading');
       submitBtn.disabled = true;
       const btnText = submitBtn.querySelector('.btn-text-content');
-      if (btnText) btnText.textContent = 'Enlisting explorer...';
+      if (btnText) btnText.textContent = 'Creating account in database...';
 
-      const newUser = {
-        username: userVal.trim(),
-        email: emailVal.trim(),
-        registeredAt: new Date().toISOString()
-      };
+      let registeredUser = null;
 
-      // 1. Store in list of registered accounts
+      // 1. Send registration request to real MongoDB Backend
       try {
-        let accounts = [];
-        const stored = localStorage.getItem('nebula_accounts');
-        if (stored) accounts = JSON.parse(stored);
-        accounts = accounts.filter(a => a.username.toLowerCase() !== newUser.username.toLowerCase());
-        accounts.push(newUser);
-        localStorage.setItem('nebula_accounts', JSON.stringify(accounts));
-      } catch (e) {
-        // Non-blocking
+        const apiBase = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '4000'))
+          ? 'http://localhost:4000'
+          : '';
+        const response = await fetch(`${apiBase}/api/auth/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: userVal.trim(),
+            email: emailVal.trim(),
+            password: passVal
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success && data.user) {
+          registeredUser = data.user;
+        } else {
+          // Rejection or duplicate error from MongoDB
+          submitBtn.classList.remove('btn-loading');
+          submitBtn.disabled = false;
+          if (btnText) btnText.textContent = 'Create Account';
+          showAlert('error', data.message || 'Error creating account.');
+          return;
+        }
+      } catch (networkErr) {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
+        if (btnText) btnText.textContent = 'Create Account';
+        showAlert('error', 'Cannot reach database server. Please ensure the backend is running.');
+        return;
       }
 
-      // 2. Automatically log in the newly registered user
-      const userSession = {
-        username: newUser.username,
-        email: newUser.email,
-        isAuthenticated: true,
-        loginTime: new Date().toISOString()
-      };
-      localStorage.setItem('nebula_user', JSON.stringify(userSession));
-
-      // 3. Provide responsive feedback and navigate to Mission Control
+      // Require player to log in with correct credentials
       setTimeout(() => {
-        if (btnText) btnText.textContent = 'Enlistment Complete ✓';
+        if (btnText) btnText.textContent = 'Account Created ✓';
         showAlert(
           'success',
-          `Welcome to the fleet, ${newUser.username}! Navigating to Mission Control...`
+          `Account created for ${registeredUser.username}! Redirecting to Sign In...`
         );
 
         setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 500);
-      }, 400);
+          window.location.href = `login.html?registered=true&user=${encodeURIComponent(registeredUser.username)}`;
+        }, 650);
+      }, 350);
     });
   }
 });

@@ -1,10 +1,12 @@
 /**
- * Nebula Match — Home Page Interactions & Virtual Identity Preview
+ * Nebula Match — Home Page & Session Navigation Controller
  * 
  * Responsibilities:
  * - Interactive 3D card showcase flip handlers (click & keyboard)
- * - Virtual Identity detection (reads stored session to update navigation badge)
- * - Smooth sign-out capability
+ * - Strict authentication check:
+ *   - Only authenticated users can access the game arena.
+ *   - Clicking 'Play Game' redirects unauthenticated users to login.html.
+ *   - Clicking 'Sign Out' clears the session and immediately redirects to login.html.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const showcaseCards = document.querySelectorAll('.showcase-card');
   const headerAuthGroup = document.getElementById('headerAuthGroup');
   const playBtn = document.getElementById('playBtn');
+  const playBtnLabel = document.getElementById('playBtnLabel');
 
   // --- 1. Interactive 3D Card Showcase ---
   showcaseCards.forEach((card) => {
@@ -29,48 +32,72 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- 2. Virtual Identity & Session Handling ---
-  function updateAuthUI() {
-    if (!headerAuthGroup) return;
-
-    // Check localStorage for logged-in explorer identity (simulated or real)
+  // --- 2. Check Stored User Session ---
+  function getAuthenticatedUser() {
     const storedUserJson = localStorage.getItem('nebula_user');
-    let currentUser = null;
+    if (!storedUserJson) return null;
 
-    if (storedUserJson) {
-      try {
-        currentUser = JSON.parse(storedUserJson);
-      } catch (e) {
-        localStorage.removeItem('nebula_user');
+    try {
+      const user = JSON.parse(storedUserJson);
+      if (user && user.username && user.isAuthenticated) {
+        return user;
+      }
+    } catch (e) {
+      localStorage.removeItem('nebula_user');
+    }
+    return null;
+  }
+
+  // --- 3. Dynamic Header & CTA Update ---
+  function updateAuthUI() {
+    const currentUser = getAuthenticatedUser();
+
+    if (headerAuthGroup) {
+      if (currentUser) {
+        const initial = currentUser.username.charAt(0).toUpperCase();
+        headerAuthGroup.innerHTML = `
+          <div class="user-badge" title="Signed in as: ${currentUser.username}">
+            <span class="user-badge-avatar" aria-hidden="true">${initial}</span>
+            <span>${currentUser.username}</span>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="signOutBtn" title="Sign out of your account">
+            Sign Out
+          </button>
+        `;
+
+        const signOutBtn = document.getElementById('signOutBtn');
+        if (signOutBtn) {
+          signOutBtn.addEventListener('click', () => {
+            // Clear player session from storage
+            localStorage.removeItem('nebula_user');
+            // Immediately navigate from home page to sign in page
+            window.location.href = 'login.html';
+          });
+        }
+      } else {
+        headerAuthGroup.innerHTML = `
+          <a href="login.html" class="btn btn-secondary btn-sm" id="authBtn">Sign In</a>
+        `;
       }
     }
 
-    if (currentUser && currentUser.username) {
-      const initial = currentUser.username.charAt(0).toUpperCase();
-      headerAuthGroup.innerHTML = `
-        <div class="user-badge" title="Authenticated Explorer: ${currentUser.username}">
-          <span class="user-badge-avatar" aria-hidden="true">${initial}</span>
-          <span>${currentUser.username}</span>
-        </div>
-        <button type="button" class="btn btn-secondary btn-sm" id="signOutBtn" title="Sign out of virtual identity">
-          Sign Out
-        </button>
-      `;
-
-      const signOutBtn = document.getElementById('signOutBtn');
-      if (signOutBtn) {
-        signOutBtn.addEventListener('click', () => {
-          localStorage.removeItem('nebula_user');
-          updateAuthUI();
-        });
-      }
-    } else {
-      headerAuthGroup.innerHTML = `
-        <a href="login.html" class="btn btn-secondary btn-sm" id="authBtn">Sign In</a>
-      `;
+    // Update CTA button state
+    if (playBtnLabel) {
+      playBtnLabel.textContent = currentUser ? 'Play Game' : 'Sign In to Play';
     }
+  }
+
+  // --- 4. Enforce Login on Play Button Click ---
+  if (playBtn) {
+    playBtn.addEventListener('click', (e) => {
+      const currentUser = getAuthenticatedUser();
+      if (!currentUser) {
+        e.preventDefault();
+        // Redirect to login page with target
+        window.location.href = 'login.html?redirect=difficulty.html';
+      }
+    });
   }
 
   updateAuthUI();
 });
-

@@ -9,6 +9,19 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Strict Auth Guard
+  const userJson = localStorage.getItem('nebula_user');
+  let authUser = null;
+  try {
+    if (userJson) authUser = JSON.parse(userJson);
+  } catch (e) {
+    localStorage.removeItem('nebula_user');
+  }
+  if (!authUser || !authUser.username || !authUser.isAuthenticated) {
+    window.location.replace('login.html');
+    return;
+  }
+
   // --- Element Selectors ---
   const outcomeBadge = document.getElementById('outcomeBadge');
   const outcomeStatusText = document.getElementById('outcomeStatusText');
@@ -44,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
       outcome: 'victory',
       score: 1380,
       difficulty: 'medium',
-      difficultyName: 'Commander Tier',
+      difficultyName: 'Medium',
       pairsMatched: 8,
       totalPairs: 8,
       moves: 12,
@@ -84,14 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (outcomeStatusText) {
     outcomeStatusText.textContent = isVictory 
-      ? 'Mission Accomplished' 
-      : 'Chronometer Depleted';
+      ? 'Victory!' 
+      : "Time's Up!";
   }
 
   if (outcomeDesc) {
     outcomeDesc.textContent = isVictory 
-      ? 'All celestial memory coordinates identified and verified.' 
-      : 'Time ran out before all coordinates could be locked. Re-calibrate and try again!';
+      ? 'Great job! You found all matching pairs in time.' 
+      : 'You ran out of time, but you can try again anytime!';
   }
 
   if (rankLetter) rankLetter.textContent = rank;
@@ -104,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     finalScoreDigits.textContent = Number(gameData.score).toLocaleString();
   }
 
-  if (statDifficulty) statDifficulty.textContent = gameData.difficultyName || 'Commander Tier';
+  if (statDifficulty) statDifficulty.textContent = gameData.difficultyName || 'Medium';
   if (statPairs) statPairs.textContent = `${gameData.pairsMatched} / ${gameData.totalPairs}`;
   if (statMoves) statMoves.textContent = `${gameData.moves} Moves`;
   if (statAccuracy) statAccuracy.textContent = `${gameData.accuracy}%`;
@@ -112,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (statBonusTime) {
     statBonusTime.textContent = gameData.bonusTimeClaimed > 0 
       ? `+${gameData.bonusTimeClaimed}s Claimed` 
-      : 'None Claimed';
+      : 'Not used';
   }
 
   // --- 4. Pre-fill Call Sign from Virtual Identity Session ---
@@ -128,27 +141,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // Non-blocking
   }
 
-  // --- 5. Submit Score to Galactic Leaderboard ---
+  // --- 5. Submit Score to Galactic Leaderboard & MongoDB ---
   let scoreSubmitted = false;
 
   if (submitScoreBtn) {
-    submitScoreBtn.addEventListener('click', () => {
+    submitScoreBtn.addEventListener('click', async () => {
       if (scoreSubmitted) return;
 
-      const callsign = (explorerCallsignInput ? explorerCallsignInput.value.trim() : '') || 'Anonymous Explorer';
+      const callsign = (explorerCallsignInput ? explorerCallsignInput.value.trim() : '') || 'Anonymous Player';
 
       const entry = {
-        id: `score-${Date.now()}`,
         callsign: callsign,
-        score: gameData.score,
-        difficulty: gameData.difficulty,
-        difficultyName: gameData.difficultyName || 'Commander',
-        accuracy: gameData.accuracy,
-        timeRemaining: Math.max(0, gameData.timeRemaining),
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        score: Number(gameData.score) || 0,
+        difficulty: gameData.difficulty || 'medium',
+        difficultyName: gameData.difficultyName || 'Medium',
+        accuracy: Number(gameData.accuracy) || 100,
+        timeRemaining: Math.max(0, Number(gameData.timeRemaining) || 0),
+        moves: Number(gameData.moves) || 0,
+        pairsMatched: Number(gameData.pairsMatched) || 0,
+        bonusTimeClaimed: Number(gameData.bonusTimeClaimed) || 0
       };
 
-      // Retrieve existing leaderboard
+      submitScoreBtn.disabled = true;
+      submitScoreBtn.innerHTML = `<span>Saving to Database...</span>`;
+
+      // 1. Try sending to MongoDB Leaderboard API
+      try {
+        const apiBase = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '4000'))
+          ? 'http://localhost:4000'
+          : '';
+        const response = await fetch(`${apiBase}/api/leaderboard`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry)
+        });
+        const resData = await response.json();
+        console.log('[Results] Saved to MongoDB:', resData);
+      } catch (e) {
+        console.warn('[Results] Server offline, using local storage.');
+      }
+
+      // 2. Also save to local storage for offline continuity
       let leaderboard = [];
       try {
         const stored = localStorage.getItem('nebula_leaderboard');
@@ -157,26 +190,28 @@ document.addEventListener('DOMContentLoaded', () => {
         leaderboard = [];
       }
 
-      leaderboard.push(entry);
-      // Sort highest score first
+      leaderboard.push({
+        id: `score-${Date.now()}`,
+        ...entry,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      });
       leaderboard.sort((a, b) => b.score - a.score);
       localStorage.setItem('nebula_leaderboard', JSON.stringify(leaderboard));
 
       scoreSubmitted = true;
-      submitScoreBtn.disabled = true;
-      submitScoreBtn.innerHTML = `<span>Recorded ✓</span>`;
+      submitScoreBtn.innerHTML = `<span>Saved ✓</span>`;
 
       if (submissionFeedback) {
         submissionFeedback.innerHTML = `
           <div style="color: #34d399; font-weight: 600; margin-top: 10px;">
-            ✓ Score successfully archived to Galactic Hall of Fame! Launching Leaderboard...
+            ✓ Score saved to database! Opening leaderboard...
           </div>
         `;
       }
 
       setTimeout(() => {
         window.location.href = 'leaderboard.html';
-      }, 700);
+      }, 600);
     });
   }
 

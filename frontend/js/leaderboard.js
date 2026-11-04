@@ -3,7 +3,7 @@
  * 
  * Responsibilities:
  * - Reads & persists high score records in localStorage
- * - Filters by difficulty tier (All, Cadet, Commander, Cosmic Ace)
+ * - Filters by difficulty tier (All, Easy, Medium, Hard)
  * - Renders Apple-style ranks with gold/silver/bronze medals
  * - Seeds default historical space pioneers if empty
  */
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       callsign: 'Neil_Armstrong',
       score: 2180,
       difficulty: 'hard',
-      difficultyName: 'Cosmic Ace',
+      difficultyName: 'Hard',
       accuracy: 94,
       timeRemaining: 14,
       date: 'Oct 28, 2026'
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       callsign: 'Valentina_Tereshkova',
       score: 1890,
       difficulty: 'medium',
-      difficultyName: 'Commander',
+      difficultyName: 'Medium',
       accuracy: 91,
       timeRemaining: 21,
       date: 'Oct 29, 2026'
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       callsign: 'Carl_Sagan',
       score: 1740,
       difficulty: 'hard',
-      difficultyName: 'Cosmic Ace',
+      difficultyName: 'Hard',
       accuracy: 86,
       timeRemaining: 9,
       date: 'Oct 30, 2026'
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       callsign: 'Mae_Jemison',
       score: 1560,
       difficulty: 'medium',
-      difficultyName: 'Commander',
+      difficultyName: 'Medium',
       accuracy: 88,
       timeRemaining: 18,
       date: 'Oct 31, 2026'
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
       callsign: 'Yuri_Gagarin',
       score: 1420,
       difficulty: 'easy',
-      difficultyName: 'Cadet',
+      difficultyName: 'Easy',
       accuracy: 95,
       timeRemaining: 32,
       date: 'Nov 01, 2026'
@@ -88,14 +88,38 @@ document.addEventListener('DOMContentLoaded', () => {
     return DEFAULT_LEADERBOARD;
   }
 
-  function renderLeaderboard() {
-    if (!leaderboardBody) return;
-    const records = getStoredLeaderboard();
+  async function fetchLeaderboardRecords() {
+    try {
+      const apiBase = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '4000'))
+        ? 'http://localhost:4000'
+        : '';
+      const url = currentFilter === 'all' 
+        ? `${apiBase}/api/leaderboard` 
+        : `${apiBase}/api/leaderboard?difficulty=${encodeURIComponent(currentFilter)}`;
 
-    // Filter
-    const filtered = currentFilter === 'all'
+      const response = await fetch(url);
+      if (response.ok) {
+        const json = await response.json();
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          return json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('[Leaderboard] Backend offline, reading from local records.');
+    }
+
+    const records = getStoredLeaderboard();
+    return currentFilter === 'all'
       ? records
       : records.filter(r => r.difficulty === currentFilter);
+  }
+
+  async function renderLeaderboard() {
+    if (!leaderboardBody) return;
+
+    leaderboardBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 24px; color: #94a3b8;">Loading records from database...</td></tr>`;
+
+    const filtered = await fetchLeaderboardRecords();
 
     // Sort by score descending
     filtered.sort((a, b) => b.score - a.score);
@@ -130,6 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entry.difficulty === 'hard') tierClass = 'tier-pill--hard';
 
       const initial = (entry.callsign || 'E').charAt(0).toUpperCase();
+      const displayTierName = {
+        easy: 'Easy',
+        medium: 'Medium',
+        hard: 'Hard'
+      }[entry.difficulty] || entry.difficultyName || entry.difficulty;
+
+      const dateStr = entry.displayDate || entry.date || (entry.createdAt ? new Date(entry.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent');
 
       row.innerHTML = `
         <td class="td-rank">${rankBadgeHtml}</td>
@@ -140,14 +171,14 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </td>
         <td class="td-tier">
-          <span class="tier-pill ${tierClass}">${entry.difficultyName || entry.difficulty}</span>
+          <span class="tier-pill ${tierClass}">${displayTierName}</span>
         </td>
         <td class="td-score">
           <span class="score-display">${Number(entry.score).toLocaleString()}</span>
         </td>
         <td class="td-accuracy">${entry.accuracy || 100}%</td>
         <td class="td-time">${entry.timeRemaining || 0}s</td>
-        <td class="td-date">${entry.date || 'Recent'}</td>
+        <td class="td-date">${dateStr}</td>
       `;
 
       leaderboardBody.appendChild(row);
@@ -178,8 +209,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Reset Leaderboard Button ---
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
+    resetBtn.addEventListener('click', async () => {
       if (confirm('Reset leaderboard to default Galactic Pioneers?')) {
+        try {
+          const apiBase = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '4000'))
+            ? 'http://localhost:4000'
+            : '';
+          await fetch(`${apiBase}/api/leaderboard/reset`, { method: 'DELETE' });
+        } catch (e) {
+          // Non-blocking
+        }
         localStorage.setItem('nebula_leaderboard', JSON.stringify(DEFAULT_LEADERBOARD));
         renderLeaderboard();
       }

@@ -47,52 +47,84 @@
     <!-- Main Content Area -->
     <main class="main-content" style="flex-direction: column;">
       
-      <section class="auth-card auth-card--challenge-standalone" aria-labelledby="fish-game-title">
+      <section class="game-modal-card game-modal-card--fish auth-card--challenge-standalone" aria-labelledby="fishModalTitle">
         
-        <header class="fish-standalone-header">
-          <div class="hero-pill" style="margin-bottom: 8px;">
-            <span>✦</span>
-            <span>API Interoperability Terminal</span>
-            <span>✦</span>
+        <!-- Top Header Bar -->
+        <header class="fish-modal-header">
+          <div class="fish-header-left">
+            <div class="fish-pill-badge">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              <span>Fish Game API Integration</span>
+            </div>
+            <h1 class="fish-modal-title" id="fishModalTitle">The Fish Game</h1>
+            <div class="fish-api-link-wrap">
+              <span class="fish-api-source" id="fishApiSource">Connected: marcconrad.com/uob/fish</span>
+              <a href="https://marcconrad.com/uob/fish/doc.php" target="_blank" rel="noopener" class="fish-doc-pill" title="View Official API Documentation">API Docs ↗</a>
+            </div>
           </div>
-          <h1 id="fish-game-title" class="auth-title" style="margin-bottom: 2px;">The Fish Game</h1>
-          <p class="fish-doc-link">
-            Connected to <code>https://marcconrad.com/uob/fish/</code>
-          </p>
+          <div class="fish-header-right">
+            <div class="reward-capsule">
+              <span class="reward-icon">✦</span>
+              <span class="reward-text">+15s Bonus Time</span>
+            </div>
+          </div>
         </header>
 
-        <!-- Picture Display Box (matching Image 3) -->
-        <div class="fish-picture-card" id="fishPictureCard">
-          <div class="fish-loading" id="fishLoading">
-            <span class="btn-spinner" aria-hidden="true"></span>
-            <span>Loading Fish Picture from API...</span>
+        <!-- macOS / visionOS Style Stage Container -->
+        <div class="fish-canvas-window">
+          <div class="fish-window-bar">
+            <div class="window-controls" aria-hidden="true">
+              <span class="w-dot w-dot-close"></span>
+              <span class="w-dot w-dot-min"></span>
+              <span class="w-dot w-dot-max"></span>
+            </div>
+            <div class="window-title">Quest Canvas — Live Feed</div>
+            <div class="window-chip" id="fishQuestStatus">Quest is ready</div>
           </div>
-          <img id="fishImg" class="fish-img" alt="The Fish Game Quest Picture" style="display: none;" />
+
+          <!-- Picture Display Box -->
+          <div class="fish-picture-card" id="fishPictureCard">
+            <div class="fish-loading" id="fishLoading">
+              <span class="btn-spinner" aria-hidden="true"></span>
+              <span>Fetching Quest from Fish Game API...</span>
+            </div>
+            <img id="fishImg" class="fish-img" alt="The Fish Game Quest Picture" style="display: none;" />
+          </div>
         </div>
 
-        <!-- Quest Status Message (matching Image 3) -->
-        <div class="fish-quest-status" id="fishQuestStatus">
-          Quest is ready.
-        </div>
-
-        <!-- Submission Form (matching Image 3) -->
+        <!-- Quest Question & Stepper Form -->
         <form id="fishGameForm" class="fish-game-form" novalidate>
-          <label for="fishCountInput" class="fish-input-label">
-            Enter the number of fish in the picture:
-          </label>
+          <div class="fish-question-prompt">
+            <label for="fishCountInput" class="fish-prompt-label">
+              Enter the number of fish in the picture:
+            </label>
+            <span class="fish-prompt-sub">Count all the fish swimming in the canvas above.</span>
+          </div>
+
           <div class="fish-input-row">
-            <input 
-              type="number" 
-              id="fishCountInput" 
-              class="form-input fish-number-input" 
-              min="0" 
-              max="25" 
-              step="1" 
-              placeholder="0" 
-              required 
-              autocomplete="off" />
-            <button type="submit" id="fishSubmitBtn" class="btn btn-primary">
-              Submit
+            <!-- Stepper Capsule -->
+            <div class="fish-stepper-capsule">
+              <button type="button" class="stepper-btn stepper-btn--minus" id="fishMinusBtn" aria-label="Decrease fish count">−</button>
+              <input 
+                type="number" 
+                id="fishCountInput" 
+                class="fish-number-input" 
+                min="0" 
+                max="25" 
+                step="1" 
+                value="0" 
+                placeholder="0"
+                required 
+                autocomplete="off" />
+              <button type="button" class="stepper-btn stepper-btn--plus" id="fishPlusBtn" aria-label="Increase fish count">+</button>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="fishSubmitBtn" class="btn btn-submit">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Submit</span>
             </button>
           </div>
         </form>
@@ -100,13 +132,17 @@
         <!-- Feedback Alert Container -->
         <div id="fishFeedback" class="fish-feedback" aria-live="polite"></div>
 
-        <!-- Action Controls (matching Image 3) -->
-        <div class="fish-actions-row" style="margin-top: 14px;">
-          <button type="button" class="btn btn-secondary" id="fishTryAgainBtn" style="display: none;">
-            Try Again
+        <!-- Action Controls -->
+        <div class="fish-actions-row">
+          <button type="button" class="btn btn-secondary btn-sm" id="fishTryAgainBtn" style="display: none;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <polyline points="3 3 3 8 8 8"></polyline>
+            </svg>
+            <span>Try Another Puzzle</span>
           </button>
-          <a href="game.html" class="btn btn-secondary" id="backToGameBtn">
-            Back to game
+          <a href="game.html" class="btn btn-secondary btn-sm" id="backToGameBtn">
+            <span>Back to Game</span>
           </a>
         </div>
 

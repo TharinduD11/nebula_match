@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nebula Match — Mission debriefing and performance statistics.">
-  <title>Mission Debrief — Nebula Match</title>
+  <meta name="description" content="Nebula Match — Game results, final score, and statistics.">
+  <title>Game Results — Nebula Match</title>
   
   <!-- Shared Design System & Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -47,33 +47,33 @@
     <!-- Main Content Area -->
     <main class="main-content" style="flex-direction: column;">
       
-      <section class="results-wrapper" aria-labelledby="debrief-heading">
+      <section class="results-wrapper" aria-labelledby="results-heading">
         
-        <!-- Debrief Card -->
+        <!-- Results Card -->
         <article class="results-card" id="resultsCard">
           
           <!-- Outcome Banner -->
           <div class="results-outcome-badge" id="outcomeBadge">
             <span id="outcomeIcon">✦</span>
-            <span id="outcomeStatusText">Mission Accomplished</span>
+            <span id="outcomeStatusText">Victory!</span>
             <span id="outcomeIconRight">✦</span>
           </div>
 
-          <h1 id="debrief-heading" class="results-main-title">
-            Cosmic Memory Debrief
+          <h1 id="results-heading" class="results-main-title">
+            Game Results
           </h1>
           <p class="results-subtitle" id="outcomeDesc">
-            All celestial signatures verified before chronometer depletion.
+            Great job! You matched all the cards before time ran out.
           </p>
 
           <!-- Score & Rank Showcase -->
           <div class="results-hero-score">
-            <div class="rank-medal" id="rankMedal" title="Mission Performance Rank">
+            <div class="rank-medal" id="rankMedal" title="Performance Rank">
               <span class="rank-letter" id="rankLetter">S</span>
               <span class="rank-sub">Rank</span>
             </div>
             <div class="score-data-wrap">
-              <div class="score-hero-label">Final Mission Score</div>
+              <div class="score-hero-label">Final Score</div>
               <div class="score-hero-number" id="finalScoreDigits">1,480</div>
             </div>
           </div>
@@ -82,32 +82,32 @@
           <div class="results-stats-grid">
             
             <div class="result-stat-item">
-              <span class="stat-item-label">Difficulty Tier</span>
-              <span class="stat-item-val" id="statDifficulty">Commander</span>
+              <span class="stat-item-label">Difficulty</span>
+              <span class="stat-item-val" id="statDifficulty">Medium</span>
             </div>
 
             <div class="result-stat-item">
-              <span class="stat-item-label">Signatures Paired</span>
+              <span class="stat-item-label">Pairs Matched</span>
               <span class="stat-item-val" id="statPairs">8 / 8</span>
             </div>
 
             <div class="result-stat-item">
-              <span class="stat-item-label">Total Moves</span>
+              <span class="stat-item-label">Moves</span>
               <span class="stat-item-val" id="statMoves">14 Moves</span>
             </div>
 
             <div class="result-stat-item">
-              <span class="stat-item-label">Memory Accuracy</span>
+              <span class="stat-item-label">Accuracy</span>
               <span class="stat-item-val stat-item-val--accent" id="statAccuracy">86%</span>
             </div>
 
             <div class="result-stat-item">
-              <span class="stat-item-label">Chronometer Remaining</span>
+              <span class="stat-item-label">Time Left</span>
               <span class="stat-item-val" id="statTimeRemaining">18s</span>
             </div>
 
             <div class="result-stat-item">
-              <span class="stat-item-label">Star Challenge Bonus</span>
+              <span class="stat-item-label">Bonus Time</span>
               <span class="stat-item-val stat-item-val--gold" id="statBonusTime">+15s Claimed</span>
             </div>
 
@@ -116,16 +116,19 @@
           <!-- Explorer Call Sign Submission Form -->
           <div class="leaderboard-submission-box">
             <div class="submission-prompt">
-              <label for="explorerCallsign" class="form-label">Explorer Call Sign for Galactic Record:</label>
+              <label for="explorerCallsign" class="form-label">Save your score to the leaderboard:</label>
               <div class="submission-input-row">
                 <input 
                   type="text" 
                   id="explorerCallsign" 
                   class="form-input" 
-                  placeholder="Enter Explorer Call Sign..." 
+                  placeholder="Enter your name..." 
                   maxlength="20">
-                <button type="button" id="submitScoreBtn" class="btn btn-primary">
-                  <span>Save to Leaderboard</span>
+                <button type="button" id="submitScoreBtn" class="btn btn-submit">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Save Score</span>
                 </button>
               </div>
             </div>

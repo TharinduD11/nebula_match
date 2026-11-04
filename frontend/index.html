@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Nebula Match — A 2D Apple-inspired cosmic memory matching game with Fish Game API challenges.">
-  <title>Nebula Match — Cosmic Memory Expedition</title>
+  <title>Nebula Match — Space Memory Game</title>
   
   <!-- Shared Design System & Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -54,19 +54,19 @@
         <!-- Eyebrow Tag -->
         <div class="hero-pill">
           <span>✦</span>
-          <span>Cosmic Memory Expedition</span>
+          <span>Space Memory Game</span>
           <span>✦</span>
         </div>
 
         <!-- Main Headline -->
         <h1 id="hero-title" class="hero-title">
-          Explore the Cosmos.<br>
-          <span class="hero-title-accent">Master Your Memory.</span>
+          Match the Stars.<br>
+          <span class="hero-title-accent">Beat the Clock.</span>
         </h1>
 
         <!-- Subtitle -->
         <p class="hero-subtitle">
-          Uncover matching celestial pairs before the countdown timer expires. When seconds run low, trigger live mathematical challenges from the Fish Game API to earn vital bonus time.
+          Flip cards to find matching pairs of planets and stars before the countdown ends. Need more time? Solve a quick fish puzzle to earn +15 bonus seconds!
         </p>
 
         <!-- CTA Buttons -->
@@ -75,7 +75,7 @@
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
-            <span>Launch Expedition</span>
+            <span id="playBtnLabel">Play Game</span>
           </a>
           <a href="how-to-play.html" class="btn btn-secondary btn-lg">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -83,7 +83,7 @@
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
               <line x1="12" y1="17" x2="12.01" y2="17"></line>
             </svg>
-            <span>Mission Guide</span>
+            <span>How to Play</span>
           </a>
         </div>
 
@@ -169,7 +169,7 @@
           </div>
           <p class="showcase-hint">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 15l6 6m-11-4a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"></path></svg>
-            <span>Hover or click cards to flip and preview celestial targets</span>
+            <span>Click or hover over cards to preview the designs</span>
           </p>
         </div>
 
@@ -178,8 +178,8 @@
       <!-- Mission Briefing / Systems Features -->
       <section class="features-section" aria-labelledby="briefing-title">
         <header class="features-heading">
-          <h2 id="briefing-title" class="features-section-title">Mission Architecture</h2>
-          <p class="features-section-desc">Key systems engineered for your cognitive journey across the cosmos.</p>
+          <h2 id="briefing-title" class="features-section-title">Game Highlights</h2>
+          <p class="features-section-desc">Everything you need to enjoy Nebula Match.</p>
         </header>
 
         <div class="features-grid">
@@ -194,11 +194,11 @@
                 <rect x="3" y="14" width="7" height="7"></rect>
               </svg>
             </div>
-            <h3 class="feature-title">Celestial Memory Grid</h3>
+            <h3 class="feature-title">Card Matching</h3>
             <p class="feature-desc">
-              Flip and recall pairs of planets, moons, and constellations before the mission timer elapses. Test short-term visual memory across adaptive difficulties.
+              Flip and match pairs of planets and stars. Build consecutive streaks to multiply your score!
             </p>
-            <span class="feature-badge">Core Engine</span>
+            <span class="feature-badge">Gameplay</span>
           </article>
 
           <!-- Feature 2: Fish Game API Interoperability -->
@@ -208,14 +208,14 @@
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
               </svg>
             </div>
-            <h3 class="feature-title">Fish Game API Challenges</h3>
+            <h3 class="feature-title">Bonus Time Quiz</h3>
             <p class="feature-desc">
-              When time is running low, activate the star trigger to query the Fish Game API for a mathematical puzzle. Correct solutions yield vital bonus time.
+              Low on time? Tap the star button to count fish from the Fish Game API and earn +15 bonus seconds.
             </p>
-            <span class="feature-badge">API Interoperability</span>
+            <span class="feature-badge">Fish Game API</span>
           </article>
 
-          <!-- Feature 3: Virtual Identity & Leaderboard -->
+          <!-- Feature 3: Player Profile & Leaderboard -->
           <article class="feature-card">
             <div class="feature-icon-wrapper" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -226,11 +226,11 @@
                 <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path>
               </svg>
             </div>
-            <h3 class="feature-title">Galactic Leaderboards</h3>
+            <h3 class="feature-title">Leaderboard</h3>
             <p class="feature-desc">
-              Scores and mission statistics are linked to your explorer virtual identity and preserved in MongoDB, letting you compete for the galaxy’s highest honors.
+              Save your best scores, track your accuracy, and see your rank across Easy, Medium, and Hard tiers.
             </p>
-            <span class="feature-badge">Score Persistence</span>
+            <span class="feature-badge">High Scores</span>
           </article>
 
         </div>

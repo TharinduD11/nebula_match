@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Nebula Match — Galactic Hall of Fame and Explorer High Scores.">
-  <title>Galactic Leaderboard — Nebula Match</title>
+  <title>Leaderboard — Nebula Match</title>
   
   <!-- Shared Design System & Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -52,30 +52,30 @@
         <div class="page-intro">
           <div class="hero-pill">
             <span>✦</span>
-            <span>Galactic Hall of Fame</span>
+            <span>High Scores</span>
             <span>✦</span>
           </div>
           <h1 id="leaderboard-heading" class="page-main-title">
-            Top Cosmic Navigators
+            Leaderboard
           </h1>
           <p class="page-main-desc">
-            Universal rankings commemorating elite pilots who conquered the memory matrix.
+            Top scores across all difficulty levels.
           </p>
         </div>
 
         <!-- Filter Navigation Tabs -->
         <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard difficulty filters">
           <button type="button" class="tab-btn is-active" data-filter="all" role="tab" aria-selected="true">
-            All Missions
-          </button>
-          <button type="button" class="tab-btn" data-filter="hard" role="tab" aria-selected="false">
-            Cosmic Ace (Hard)
-          </button>
-          <button type="button" class="tab-btn" data-filter="medium" role="tab" aria-selected="false">
-            Commander (Medium)
+            All
           </button>
           <button type="button" class="tab-btn" data-filter="easy" role="tab" aria-selected="false">
-            Cadet (Easy)
+            Easy
+          </button>
+          <button type="button" class="tab-btn" data-filter="medium" role="tab" aria-selected="false">
+            Medium
+          </button>
+          <button type="button" class="tab-btn" data-filter="hard" role="tab" aria-selected="false">
+            Hard
           </button>
         </div>
 
@@ -86,12 +86,12 @@
               <thead>
                 <tr>
                   <th scope="col" class="th-rank">Rank</th>
-                  <th scope="col" class="th-explorer">Explorer Call Sign</th>
+                  <th scope="col" class="th-explorer">Player</th>
                   <th scope="col" class="th-tier">Difficulty</th>
                   <th scope="col" class="th-score">Score</th>
                   <th scope="col" class="th-accuracy">Accuracy</th>
                   <th scope="col" class="th-time">Time Left</th>
-                  <th scope="col" class="th-date">Mission Date</th>
+                  <th scope="col" class="th-date">Date</th>
                 </tr>
               </thead>
               <tbody id="leaderboardBody">
@@ -102,7 +102,7 @@
 
           <!-- Empty State Container -->
           <div id="emptyState" class="leaderboard-empty" style="display: none;">
-            <p>No mission records found for this difficulty tier.</p>
+            <p>No scores recorded for this difficulty yet. Play a game to get on the board!</p>
           </div>
         </div>
 

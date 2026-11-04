@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 4000;
 
 // Cross-Origin Resource Sharing
 app.use(cors({
-  origin: '*', // Allow all origins during development
+  origin: true, // Dynamically allow any origin (e.g. localhost:5500, file://, etc.)
   credentials: true
 }));
 
@@ -51,6 +51,17 @@ app.use(express.static(frontendPath));
 // --- API Routes ---
 app.use('/api/health', require('./routes/health'));
 app.use('/api/fish', require('./routes/fish'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/leaderboard', require('./routes/leaderboard'));
+
+// Live Database Status Endpoint
+const { getConnectionStatus } = require('./database/connection');
+app.get('/api/db/status', (req, res) => {
+  res.json({
+    success: true,
+    database: getConnectionStatus()
+  });
+});
 
 // Root path handler: serves the Home page (index.html)
 app.get('/', (req, res) => {

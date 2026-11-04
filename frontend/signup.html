@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nebula Match — Create your explorer account for the cosmic memory expedition.">
+  <meta name="description" content="Nebula Match — Create your player account to track scores and rank on the leaderboard.">
   <title>Sign Up — Nebula Match</title>
   
   <!-- Shared Design System & Stylesheet -->
@@ -32,9 +32,16 @@
         <span>Nebula Match</span>
       </a>
 
-      <div class="system-status" aria-label="System status">
-        <span class="status-dot" aria-hidden="true"></span>
-        <span>Virtual Identity Lab</span>
+      <!-- Center Nav Links -->
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="index.html" class="header-nav-link">Home</a>
+        <a href="how-to-play.html" class="header-nav-link">How to Play</a>
+        <a href="leaderboard.html" class="header-nav-link">Leaderboard</a>
+      </nav>
+
+      <!-- Right Action Link -->
+      <div class="header-auth-group">
+        <a href="login.html" class="btn btn-secondary btn-sm">Sign In</a>
       </div>
     </header>
 
@@ -53,7 +60,7 @@
             </svg>
           </div>
           <h1 id="signup-heading" class="auth-title">Create Account</h1>
-          <p class="auth-description">Enlist your explorer profile to enter the memory expedition.</p>
+          <p class="auth-description">Create an account to save your scores and progress.</p>
         </header>
 
         <!-- Dynamic Feedback Alert Container -->
@@ -68,7 +75,7 @@
           <!-- Explorer Call Sign (Username) -->
           <div class="form-group" id="usernameGroup">
             <div class="form-label-row">
-              <label for="username" class="form-label">Explorer Call Sign</label>
+              <label for="username" class="form-label">Username</label>
             </div>
             <div class="input-wrapper">
               <svg class="input-icon-lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -80,7 +87,7 @@
                 id="username" 
                 name="username" 
                 class="form-input" 
-                placeholder="e.g. astro_ace" 
+                placeholder="e.g. alex_star" 
                 autocomplete="username" 
                 autocapitalize="none" 
                 spellcheck="false"
@@ -105,7 +112,7 @@
                 id="email" 
                 name="email" 
                 class="form-input" 
-                placeholder="explorer@nebula.io" 
+                placeholder="you@example.com" 
                 autocomplete="email" 
                 autocapitalize="none" 
                 spellcheck="false"

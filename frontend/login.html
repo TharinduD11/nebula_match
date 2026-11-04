@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nebula Match — Sign in to your cosmic memory expedition account.">
+  <meta name="description" content="Nebula Match — Sign in to your player account.">
   <title>Sign In — Nebula Match</title>
   
   <!-- Shared Design System & Stylesheet -->
@@ -33,9 +33,16 @@
         <span>Nebula Match</span>
       </a>
 
-      <div class="system-status" aria-label="System status">
-        <span class="status-dot" aria-hidden="true"></span>
-        <span>Virtual Identity Lab</span>
+      <!-- Center Nav Links -->
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="index.html" class="header-nav-link">Home</a>
+        <a href="how-to-play.html" class="header-nav-link">How to Play</a>
+        <a href="leaderboard.html" class="header-nav-link">Leaderboard</a>
+      </nav>
+
+      <!-- Right Action Link -->
+      <div class="header-auth-group">
+        <a href="signup.html" class="btn btn-secondary btn-sm">Sign Up</a>
       </div>
     </header>
 
@@ -53,7 +60,7 @@
             </svg>
           </div>
           <h1 id="login-heading" class="auth-title">Welcome Back</h1>
-          <p class="auth-description">Sign in to resume your cosmic memory expedition.</p>
+          <p class="auth-description">Sign in to play and track your scores.</p>
         </header>
 
         <!-- Dynamic Feedback Alert Container -->
@@ -80,7 +87,7 @@
                 id="identifier" 
                 name="identifier" 
                 class="form-input" 
-                placeholder="explorer@nebula.io or astro_ace" 
+                placeholder="Enter your email or username" 
                 autocomplete="username" 
                 autocapitalize="none" 
                 spellcheck="false"

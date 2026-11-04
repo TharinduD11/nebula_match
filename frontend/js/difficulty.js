@@ -1,13 +1,28 @@
 /**
- * Nebula Match — Difficulty Selector Interactions
+ * Nebula Match — Difficulty Selector Interactions & Auth Guard
  * 
  * Handles:
+ * - Strict auth protection (redirects to login.html if not signed in)
  * - Dynamic card selection with keyboard & click navigation
  * - Updating the launch button label
  * - Navigating to game.html?difficulty=<tier>
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- 1. Strict Auth Guard ---
+  const userJson = localStorage.getItem('nebula_user');
+  let authUser = null;
+  try {
+    if (userJson) authUser = JSON.parse(userJson);
+  } catch (e) {
+    localStorage.removeItem('nebula_user');
+  }
+
+  if (!authUser || !authUser.username || !authUser.isAuthenticated) {
+    window.location.replace('login.html?redirect=difficulty.html');
+    return;
+  }
+
   const tierCards = document.querySelectorAll('.tier-card');
   const launchGameBtn = document.getElementById('launchGameBtn');
   const launchBtnText = document.getElementById('launchBtnText');
@@ -15,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedTier = 'medium';
 
   const TIER_DETAILS = {
-    easy: { name: 'Cadet', time: '60s', desc: 'Launch Cadet Expedition (60s)' },
-    medium: { name: 'Commander', time: '45s', desc: 'Launch Commander Expedition (45s)' },
-    hard: { name: 'Cosmic Ace', time: '35s', desc: 'Launch Cosmic Ace Expedition (35s)' }
+    easy: { name: 'Easy', time: '60s', desc: 'Start Easy Game (60s)' },
+    medium: { name: 'Medium', time: '45s', desc: 'Start Medium Game (45s)' },
+    hard: { name: 'Hard', time: '35s', desc: 'Start Hard Game (35s)' }
   };
 
   function selectTier(tierKey) {
@@ -65,4 +80,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-

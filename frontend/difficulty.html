@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nebula Match — Select your memory expedition difficulty: Cadet, Commander, or Cosmic Ace.">
+  <meta name="description" content="Nebula Match — Select your memory expedition difficulty: Easy, Medium, or Hard.">
   <title>Difficulty Selection — Nebula Match</title>
   
   <!-- Shared Design System & Stylesheet -->
@@ -53,24 +53,24 @@
         <div class="page-intro">
           <div class="hero-pill">
             <span>✦</span>
-            <span>Expedition Configuration</span>
+            <span>Game Settings</span>
             <span>✦</span>
           </div>
           <h1 id="diff-title" class="page-main-title">
-            Select Mission Orbit
+            Choose Difficulty
           </h1>
           <p class="page-main-desc">
-            Calibrate grid density and chronometer duration according to your cognitive threshold.
+            Pick a level to start playing. You can change this anytime.
           </p>
         </div>
 
         <!-- 3 Tier Selection Cards -->
         <div class="difficulty-grid" role="radiogroup" aria-label="Mission difficulty tiers">
           
-          <!-- Tier 1: Cadet (Easy) -->
+          <!-- Tier 1: Easy -->
           <article class="tier-card" data-tier="easy" tabindex="0" role="radio" aria-checked="false">
             <div class="tier-header">
-              <span class="tier-tag">Training Orbit</span>
+              <span class="tier-tag">Casual</span>
               <div class="tier-glyph-circle" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
                   <circle cx="12" cy="12" r="10"></circle>
@@ -78,20 +78,20 @@
                 </svg>
               </div>
             </div>
-            <h2 class="tier-title">Cadet</h2>
-            <p class="tier-desc">Gentle cosmic grid with generous reaction time. Ideal for warming up visual memory.</p>
+            <h2 class="tier-title">Easy</h2>
+            <p class="tier-desc">Relaxed pace with fewer cards. Great for warming up your memory.</p>
             
             <div class="tier-specs">
               <div class="spec-row">
-                <span class="spec-label">Grid Layout</span>
+                <span class="spec-label">Grid</span>
                 <span class="spec-val">4 × 3 (12 Cards)</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">Pairs to Match</span>
-                <span class="spec-val">6 Celestial Pairs</span>
+                <span class="spec-label">Pairs</span>
+                <span class="spec-val">6 Pairs</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">Chronometer</span>
+                <span class="spec-label">Time</span>
                 <span class="spec-val spec-val--highlight">60 Seconds</span>
               </div>
               <div class="spec-row">
@@ -102,35 +102,35 @@
 
             <div class="tier-select-indicator">
               <span class="indicator-radio"></span>
-              <span class="indicator-label">Select Cadet</span>
+              <span class="indicator-label">Select Easy</span>
             </div>
           </article>
 
-          <!-- Tier 2: Commander (Medium) - Default -->
+          <!-- Tier 2: Medium - Default -->
           <article class="tier-card tier-card--featured is-selected" data-tier="medium" tabindex="0" role="radio" aria-checked="true">
             <div class="tier-badge-recommended">Recommended</div>
             <div class="tier-header">
-              <span class="tier-tag">Interstellar Orbit</span>
+              <span class="tier-tag">Standard</span>
               <div class="tier-glyph-circle" style="background: rgba(99, 102, 241, 0.18); color: #818cf8;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
                   <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path>
                 </svg>
               </div>
             </div>
-            <h2 class="tier-title">Commander</h2>
-            <p class="tier-desc">Balanced high-tempo expedition requiring sharp recall and tactical pacing.</p>
+            <h2 class="tier-title">Medium</h2>
+            <p class="tier-desc">The classic challenge. Balanced card count and timer.</p>
             
             <div class="tier-specs">
               <div class="spec-row">
-                <span class="spec-label">Grid Layout</span>
+                <span class="spec-label">Grid</span>
                 <span class="spec-val">4 × 4 (16 Cards)</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">Pairs to Match</span>
-                <span class="spec-val">8 Celestial Pairs</span>
+                <span class="spec-label">Pairs</span>
+                <span class="spec-val">8 Pairs</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">Chronometer</span>
+                <span class="spec-label">Time</span>
                 <span class="spec-val spec-val--highlight">45 Seconds</span>
               </div>
               <div class="spec-row">
@@ -141,34 +141,34 @@
 
             <div class="tier-select-indicator">
               <span class="indicator-radio"></span>
-              <span class="indicator-label">Selected Commander</span>
+              <span class="indicator-label">Selected Medium</span>
             </div>
           </article>
 
-          <!-- Tier 3: Cosmic Ace (Hard) -->
+          <!-- Tier 3: Hard -->
           <article class="tier-card" data-tier="hard" tabindex="0" role="radio" aria-checked="false">
             <div class="tier-header">
-              <span class="tier-tag">Deep Space Warp</span>
+              <span class="tier-tag">Expert</span>
               <div class="tier-glyph-circle" style="background: rgba(244, 63, 94, 0.14); color: #f43f5e;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
               </div>
             </div>
-            <h2 class="tier-title">Cosmic Ace</h2>
-            <p class="tier-desc">Unforgiving memory trial with dense card grid. Reserved for elite spatial navigators.</p>
+            <h2 class="tier-title">Hard</h2>
+            <p class="tier-desc">Fast-paced 20-card grid. Test your speed and recall!</p>
             
             <div class="tier-specs">
               <div class="spec-row">
-                <span class="spec-label">Grid Layout</span>
+                <span class="spec-label">Grid</span>
                 <span class="spec-val">5 × 4 (20 Cards)</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">Pairs to Match</span>
-                <span class="spec-val">10 Celestial Pairs</span>
+                <span class="spec-label">Pairs</span>
+                <span class="spec-val">10 Pairs</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">Chronometer</span>
+                <span class="spec-label">Time</span>
                 <span class="spec-val spec-val--highlight">35 Seconds</span>
               </div>
               <div class="spec-row">
@@ -179,7 +179,7 @@
 
             <div class="tier-select-indicator">
               <span class="indicator-radio"></span>
-              <span class="indicator-label">Select Cosmic Ace</span>
+              <span class="indicator-label">Select Hard</span>
             </div>
           </article>
 
@@ -191,11 +191,11 @@
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
-            <span id="launchBtnText">Launch Commander Expedition (45s)</span>
+            <span id="launchBtnText">Start Medium Game (45s)</span>
           </button>
           
           <a href="how-to-play.html" class="btn btn-secondary btn-lg">
-            <span>Review Flight Rules</span>
+            <span>How to Play</span>
           </a>
         </div>
 
