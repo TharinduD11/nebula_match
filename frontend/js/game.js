@@ -103,6 +103,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const tierDisplayPill = document.getElementById('tierDisplayPill');
   const starTriggerBtn = document.getElementById('starTriggerBtn');
 
+  function showScoreGain(points) {
+    if (!scoreValue || points <= 0) return;
+    const scoreCard = scoreValue.closest('.hud-card');
+    if (!scoreCard) return;
+
+    const scoreGain = document.createElement('span');
+    scoreGain.className = 'score-gain-float';
+    scoreGain.textContent = `+${Number(points).toLocaleString()}`;
+    scoreGain.setAttribute('aria-hidden', 'true');
+    scoreCard.appendChild(scoreGain);
+    scoreGain.addEventListener('animationend', () => scoreGain.remove(), { once: true });
+  }
+
   // Header controls & badges
   const soundToggleBtn = document.getElementById('soundToggleBtn');
   const hudUserBadge = document.getElementById('hudUserBadge');
@@ -160,6 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const config = DIFFICULTY_MAP[selectedDifficulty] || DIFFICULTY_MAP.medium;
+  if (window.matchMedia('(min-width: 901px)').matches) {
+    // Two compact rows keep every desktop difficulty visible without scrolling.
+    config.cols = config.totalPairs;
+  }
   if (tierDisplayPill) {
     tierDisplayPill.querySelector('span').textContent = config.name;
   }
@@ -438,12 +455,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const awardedPoints = Math.round(basePoints * streakMultiplier * config.multiplier);
         currentScore += awardedPoints;
         if (scoreValue) scoreValue.textContent = currentScore;
+        showScoreGain(awardedPoints);
 
         // Streak update
         streakMultiplier++;
         if (streakBadge && streakCount) {
           streakBadge.style.display = 'inline-flex';
           streakCount.textContent = `${streakMultiplier}×`;
+          streakBadge.classList.remove('is-combo-pop');
+          void streakBadge.offsetWidth;
+          streakBadge.classList.add('is-combo-pop');
+          setTimeout(() => streakBadge.classList.remove('is-combo-pop'), 480);
+        }
+
+        if (streakMultiplier > 2) {
+          [card1, card2].forEach((card) => {
+            card.classList.remove('is-combo-match');
+            void card.offsetWidth;
+            card.classList.add('is-combo-match');
+            setTimeout(() => card.classList.remove('is-combo-match'), 600);
+          });
         }
 
         flippedCards = [];
@@ -528,6 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const timeBonus = Math.round(timeRemaining * 25 * config.multiplier);
       currentScore += timeBonus;
       if (scoreValue) scoreValue.textContent = currentScore;
+      showScoreGain(timeBonus);
     }
 
     // Accuracy calculation

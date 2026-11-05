@@ -59,22 +59,22 @@
             Leaderboard
           </h1>
           <p class="page-main-desc">
-            Top scores across all difficulty levels.
+            Your saved scores across all difficulty levels.
           </p>
         </div>
 
         <!-- Filter Navigation Tabs -->
         <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard difficulty filters">
-          <button type="button" class="tab-btn is-active" data-filter="all" role="tab" aria-selected="true">
-            All
+          <button type="button" class="tab-btn is-active" id="filter-all" data-filter="all" role="tab" aria-selected="true" aria-controls="leaderboardTable" aria-label="Show all scores">
+            All Scores
           </button>
-          <button type="button" class="tab-btn" data-filter="easy" role="tab" aria-selected="false">
+          <button type="button" class="tab-btn" id="filter-easy" data-filter="easy" role="tab" aria-selected="false" aria-controls="leaderboardTable" aria-label="Show easy scores">
             Easy
           </button>
-          <button type="button" class="tab-btn" data-filter="medium" role="tab" aria-selected="false">
+          <button type="button" class="tab-btn" id="filter-medium" data-filter="medium" role="tab" aria-selected="false" aria-controls="leaderboardTable" aria-label="Show medium scores">
             Medium
           </button>
-          <button type="button" class="tab-btn" data-filter="hard" role="tab" aria-selected="false">
+          <button type="button" class="tab-btn" id="filter-hard" data-filter="hard" role="tab" aria-selected="false" aria-controls="leaderboardTable" aria-label="Show hard scores">
             Hard
           </button>
         </div>
@@ -82,16 +82,13 @@
         <!-- Leaderboard Table Container -->
         <div class="leaderboard-table-card">
           <div class="table-responsive">
-            <table class="leaderboard-table" aria-label="Leaderboard rankings">
+            <table class="leaderboard-table" id="leaderboardTable" aria-label="Leaderboard rankings">
               <thead>
                 <tr>
-                  <th scope="col" class="th-rank">Rank</th>
                   <th scope="col" class="th-explorer">Player</th>
                   <th scope="col" class="th-tier">Difficulty</th>
+                  <th scope="col" class="th-outcome">Result</th>
                   <th scope="col" class="th-score">Score</th>
-                  <th scope="col" class="th-accuracy">Accuracy</th>
-                  <th scope="col" class="th-time">Time Left</th>
-                  <th scope="col" class="th-date">Date</th>
                 </tr>
               </thead>
               <tbody id="leaderboardBody">
@@ -114,9 +111,6 @@
             </svg>
             <span>Launch New Mission</span>
           </a>
-          <button type="button" class="btn btn-secondary btn-sm" id="resetLeaderboardBtn" title="Reset leaderboard scores to default pioneers">
-            Reset Sample Data
-          </button>
         </div>
 
       </section>

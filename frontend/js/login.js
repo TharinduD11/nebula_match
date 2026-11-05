@@ -282,9 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Persist active session to client storage
       localStorage.setItem('nebula_user', JSON.stringify(explorerSession));
 
-      // Check for optional redirect target or default to Home
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectTarget = urlParams.get('redirect') || 'index.html';
+      // Always send signed-in players to the Home page first.
+      const redirectTarget = 'index.html';
 
       // Provide smooth visual feedback before navigating
       setTimeout(() => {

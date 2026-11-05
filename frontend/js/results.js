@@ -149,8 +149,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (scoreSubmitted) return;
 
       const callsign = (explorerCallsignInput ? explorerCallsignInput.value.trim() : '') || 'Anonymous Player';
+      let ownerUsername = '';
+      try {
+        const currentUser = JSON.parse(localStorage.getItem('nebula_user') || 'null');
+        ownerUsername = currentUser && currentUser.username ? currentUser.username : '';
+      } catch (e) {
+        ownerUsername = '';
+      }
 
       const entry = {
+        ownerUsername,
+        outcome: gameData.outcome === 'victory' ? 'win' : 'lose',
         callsign: callsign,
         score: Number(gameData.score) || 0,
         difficulty: gameData.difficulty || 'medium',
