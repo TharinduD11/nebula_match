@@ -12,7 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const leaderboardBody = document.getElementById('leaderboardBody');
   const emptyState = document.getElementById('emptyState');
   const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabsContainer = document.querySelector('.leaderboard-tabs');
   let currentFilter = 'all';
+
+  function moveTabIndicator(activeButton) {
+    if (!tabsContainer || !activeButton) return;
+    const activeIndex = Array.from(tabBtns).indexOf(activeButton);
+    if (activeIndex >= 0) {
+      tabsContainer.style.setProperty('--active-offset', `${activeIndex * 100}%`);
+    }
+  }
 
   function getCurrentUsername() {
     try {
@@ -166,11 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       btn.classList.add('is-active');
       btn.setAttribute('aria-selected', 'true');
+      moveTabIndicator(btn);
       currentFilter = btn.dataset.filter;
       renderLeaderboard();
     });
   });
 
+  moveTabIndicator(document.querySelector('.leaderboard-tabs .tab-btn.is-active'));
   renderLeaderboard();
 });
 

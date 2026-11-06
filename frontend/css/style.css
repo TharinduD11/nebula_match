@@ -900,23 +900,53 @@ body {
 }
 
 .hero-pill {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 18px;
-  margin-bottom: 22px;
-  font-size: 0.75rem;
+  gap: 10px;
+  padding: 6px 14px;
+  margin-bottom: 16px;
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #93c5fd;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  letter-spacing: 0.015em;
+  color: #e7efff;
+  background:
+    radial-gradient(120% 160% at 12% 0%, rgba(255, 255, 255, 0.16), transparent 48%),
+    linear-gradient(135deg, rgba(96, 165, 250, 0.13), rgba(139, 92, 246, 0.12) 58%, rgba(255, 255, 255, 0.055));
+  border: 1px solid rgba(191, 219, 254, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.42);
   border-radius: var(--radius-pill);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  backdrop-filter: blur(24px) saturate(190%);
+  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.hero-pill::after {
+  position: absolute;
+  z-index: -1;
+  top: -45%;
+  bottom: -45%;
+  left: -45%;
+  width: 32%;
+  content: '';
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.13), transparent);
+  transform: skewX(-18deg);
+  animation: heroPillShimmer 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero-pill-spark {
+  color: #bfdbfe;
+  font-size: 0.9rem;
+  text-shadow: 0 0 10px rgba(147, 197, 253, 0.75);
+}
+
+@keyframes heroPillShimmer {
+  0%, 16% { transform: translateX(0) skewX(-18deg); opacity: 0; }
+  28% { opacity: 1; }
+  48%, 100% { transform: translateX(520%) skewX(-18deg); opacity: 0; }
 }
 
 .hero-title {
@@ -1144,30 +1174,6 @@ body {
   text-transform: uppercase;
 }
 
-/* --- Global Page Footer --- */
-.site-footer {
-  width: 100%;
-  max-width: 1040px;
-  padding: 8px 0 4px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: var(--font-size-xs);
-  color: rgba(255, 255, 255, 0.5);
-  gap: 12px;
-}
-
-.footer-nav {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-
-.footer-nav span, .footer-nav a {
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-}
-
 /* --- Accessibility: Reduced Motion --- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1256,17 +1262,6 @@ body {
     font-size: var(--font-size-lg);
   }
 
-  .site-footer {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .footer-nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
 }
 
 
@@ -3630,41 +3625,80 @@ body {
 /* Clear, touch-friendly difficulty filters on the personal leaderboard. */
 .leaderboard-tabs {
   width: min(100%, 520px);
-  gap: 4px;
+  max-width: 520px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
   padding: 6px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
-  border-color: rgba(255, 255, 255, 0.12);
-  border-top-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.16);
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 999px;
+  background:
+    radial-gradient(120% 180% at 8% 0%, rgba(255, 255, 255, 0.17), transparent 48%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(147, 197, 253, 0.075));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top-color: rgba(255, 255, 255, 0.34);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  backdrop-filter: blur(26px) saturate(180%);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.16);
+}
+
+.leaderboard-tabs::before {
+  position: absolute;
+  z-index: 0;
+  top: 6px;
+  bottom: 6px;
+  left: 6px;
+  width: calc((100% - 12px) / 4);
+  content: '';
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-top-color: rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  background:
+    radial-gradient(130% 150% at 18% 0%, rgba(255, 255, 255, 0.36), transparent 56%),
+    linear-gradient(145deg, rgba(219, 234, 254, 0.2), rgba(129, 140, 248, 0.14));
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16), inset 0 1px 1px rgba(255, 255, 255, 0.28);
+  transform: translateX(var(--active-offset, 0%));
+  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 180ms ease, box-shadow 180ms ease;
+  pointer-events: none;
 }
 
 .leaderboard-tabs .tab-btn {
+  position: relative;
+  z-index: 1;
   flex: 1 1 0;
   min-width: 0;
-  min-height: 44px;
-  padding: 10px 14px;
+  height: 44px;
+  padding: 6px 8px;
   border: 1px solid transparent;
+  border-top-color: transparent;
   border-radius: var(--radius-pill);
-  color: var(--color-text-secondary);
-  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9375rem;
+  font-weight: 500;
   letter-spacing: -0.01em;
   white-space: nowrap;
+  box-shadow: none;
+  transition: color 180ms ease;
 }
 
 .leaderboard-tabs .tab-btn:hover:not(.is-active) {
-  background: rgba(255, 255, 255, 0.075);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: transparent;
+  border-color: transparent;
+  border-top-color: transparent;
   color: #ffffff;
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .leaderboard-tabs .tab-btn.is-active {
-  background: linear-gradient(145deg, rgba(96, 165, 250, 0.94), rgba(37, 99, 235, 0.82));
-  border-color: rgba(255, 255, 255, 0.3);
-  border-top-color: rgba(255, 255, 255, 0.68);
+  background: transparent;
+  border-color: transparent;
+  border-top-color: transparent;
   color: #ffffff;
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.38),
-    inset 0 1px 1px rgba(255, 255, 255, 0.52), inset 0 -1px 0 rgba(15, 23, 42, 0.18);
+  box-shadow: none;
 }
 
 .leaderboard-tabs .tab-btn:focus-visible {
@@ -3674,14 +3708,21 @@ body {
 
 @media (max-width: 480px) {
   .leaderboard-tabs {
-    gap: 3px;
+    width: 100%;
     padding: 5px;
     margin-bottom: 18px;
   }
 
   .leaderboard-tabs .tab-btn {
-    min-height: 42px;
-    padding: 9px 7px;
+    height: 42px;
+    padding: 5px 3px;
     font-size: 0.78rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaderboard-tabs::before,
+  .leaderboard-tabs .tab-btn {
+    transition: none;
   }
 }
