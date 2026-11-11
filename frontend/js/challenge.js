@@ -28,71 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let activeFishSolution = null;
 
-  function createLocalFishPuzzle() {
-    const count = Math.floor(Math.random() * 5) + 3; // 3 to 7 fish
-    const width = 640;
-    const height = 340;
-    const positions = [];
-    const minDistance = 110;
-
-    for (let i = 0; i < count; i++) {
-      let placed = false;
-      let tries = 0;
-      while (!placed && tries < 100) {
-        tries++;
-        const x = Math.floor(Math.random() * (width - 180)) + 90;
-        const y = Math.floor(Math.random() * (height - 120)) + 60;
-        const scale = 0.92 + Math.random() * 0.18;
-        const flip = Math.random() > 0.4 ? 1 : -1;
-
-        const tooClose = positions.some(p => {
-          const dx = p.x - x;
-          const dy = p.y - y;
-          return Math.sqrt(dx * dx + dy * dy) < minDistance;
-        });
-
-        if (!tooClose) {
-          positions.push({ x, y, scale, flip });
-          placed = true;
-        }
-      }
-      if (!placed) {
-        const col = i % 3;
-        const row = Math.floor(i / 3);
-        positions.push({ x: 120 + col * 180, y: 80 + row * 110, scale: 1, flip: 1 });
-      }
-    }
-
-    const fishNodes = positions.map((p, idx) => {
-      const sx = (p.scale * p.flip).toFixed(2);
-      const sy = p.scale.toFixed(2);
-      return `
-      <!-- Fish #${idx + 1} -->
-      <g transform="translate(${p.x}, ${p.y}) scale(${sx}, ${sy})">
-        <!-- Fish Body matching Image 3 -->
-        <path d="M -38,0 C -24,-20 20,-20 34,0 C 20,20 -24,20 -38,0 Z" fill="#ffffff" stroke="#0f172a" stroke-width="3" stroke-linejoin="round" />
-        <!-- Fish Tail matching Image 3 -->
-        <path d="M 30,-2 L 50,-16 L 46,0 L 50,16 L 30,2 Z" fill="#ffffff" stroke="#0f172a" stroke-width="3" stroke-linejoin="round" />
-        <!-- Eye matching Image 3 -->
-        <circle cx="-18" cy="-5" r="3.2" fill="#0f172a" />
-      </g>
-      `;
-    }).join('\n');
-
-    const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="100%">
-        <rect width="${width}" height="${height}" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5" />
-        ${fishNodes}
-      </svg>
-    `.trim();
-
-    return {
-      question: `data:image/svg+xml;base64,${btoa(svg)}`,
-      solution: positions.length,
-      source: 'local-fish-engine'
-    };
-  }
-
   async function loadFishQuest() {
     if (!fishLoading || !fishImg) return;
 
@@ -102,59 +37,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fishTryAgainBtn) fishTryAgainBtn.style.display = 'none';
     if (fishCountInput) {
       fishCountInput.value = '0';
-      fishCountInput.disabled = false;
+      fishCountInput.disabled = true;
     }
-    if (fishSubmitBtn) fishSubmitBtn.disabled = false;
+    if (fishSubmitBtn) fishSubmitBtn.disabled = true;
     if (fishQuestStatus) fishQuestStatus.textContent = 'Contacting Fish Game API...';
 
-    let puzzle = null;
-
-    // 1. Try Express backend proxy
     try {
       const apiBase = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '4000'))
         ? 'http://localhost:4000'
         : '';
       const res = await fetch(`${apiBase}/api/fish/challenge`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success && data.question && data.solution !== undefined) {
-          puzzle = data;
+      const puzzle = await res.json();
+      const solution = Number(puzzle.solution);
+      if (!res.ok || !puzzle.success || !puzzle.question || !Number.isInteger(solution)) {
+        throw new Error(puzzle.message || 'Could not load a Fish Game puzzle.');
+      }
+
+      activeFishSolution = solution;
+
+      fishImg.onload = () => {
+        fishLoading.style.display = 'none';
+        fishImg.style.display = 'block';
+        if (fishQuestStatus) fishQuestStatus.textContent = 'Live API Feed • Quest Ready';
+        if (fishCountInput) {
+          fishCountInput.disabled = false;
+          fishCountInput.focus();
         }
-      }
-    } catch (e) {
-      // Backend not reached
-    }
+        if (fishSubmitBtn) fishSubmitBtn.disabled = false;
+      };
+      fishImg.onerror = () => {
+        activeFishSolution = null;
+        fishLoading.style.display = 'none';
+        if (fishQuestStatus) fishQuestStatus.textContent = 'Puzzle image could not load';
+        if (fishFeedback) fishFeedback.innerHTML = '<div class="fish-alert-error">Puzzle image could not load. Please try again.</div>';
+        if (fishTryAgainBtn) fishTryAgainBtn.style.display = 'inline-flex';
+      };
+      fishImg.src = puzzle.question;
 
-    // 2. Direct clean fallback
-    if (!puzzle) {
-      puzzle = createLocalFishPuzzle();
-    }
-
-    activeFishSolution = Number(puzzle.solution);
-
-    fishImg.onload = () => {
+      if (fishImg.complete && fishImg.naturalWidth > 0) fishImg.onload();
+    } catch (err) {
+      activeFishSolution = null;
       fishLoading.style.display = 'none';
-      fishImg.style.display = 'block';
-      if (fishQuestStatus) {
-        const sourceLabel = puzzle.source === 'marcconrad-fish-api' ? 'Live API Feed • Quest Ready' : 'Quest is ready.';
-        fishQuestStatus.textContent = sourceLabel;
-      }
-      if (fishCountInput) fishCountInput.focus();
-    };
-    fishImg.onerror = () => {
-      const fallback = createLocalFishPuzzle();
-      activeFishSolution = fallback.solution;
-      fishImg.src = fallback.question;
-      fishLoading.style.display = 'none';
-      fishImg.style.display = 'block';
-      if (fishQuestStatus) fishQuestStatus.textContent = 'Quest is ready.';
-    };
-    fishImg.src = puzzle.question;
-
-    // Safety check for cached data URL
-    if (fishImg.complete && fishImg.naturalWidth > 0) {
-      fishLoading.style.display = 'none';
-      fishImg.style.display = 'block';
+      if (fishQuestStatus) fishQuestStatus.textContent = 'Fish Game API unavailable';
+      if (fishFeedback) fishFeedback.innerHTML = '<div class="fish-alert-error">Could not connect to the Fish Game API. Check your connection and try again.</div>';
+      if (fishTryAgainBtn) fishTryAgainBtn.style.display = 'inline-flex';
     }
   }
 

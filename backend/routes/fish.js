@@ -13,21 +13,20 @@ const { getFishChallenge, verifyFishAnswer } = require('../services/fishService'
 // GET /api/fish/challenge
 router.get('/challenge', async (req, res) => {
   try {
-    const mode = req.query.mode || 'clean';
-    const puzzle = await getFishChallenge(mode);
+    const puzzle = await getFishChallenge();
     res.json({
       success: true,
       question: puzzle.question,
       solution: puzzle.solution,
-      fish: puzzle.solution,
+      fish: puzzle.fish,
       source: puzzle.source,
       message: 'Quest is ready.'
     });
   } catch (err) {
     console.error('[Fish API Error]', err);
-    res.status(500).json({
+    res.status(502).json({
       success: false,
-      message: 'Failed to generate Fish Game challenge.'
+      message: 'The Fish Game API is unavailable. Please try again shortly.'
     });
   }
 });
