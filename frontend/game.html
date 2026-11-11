@@ -182,15 +182,7 @@
         <!-- Modal Top Bar -->
         <header class="fish-modal-header">
           <div class="fish-header-left">
-            <div class="fish-pill-badge">
-              <span class="pulse-dot" aria-hidden="true"></span>
-              <span>Fish Game API Integration</span>
-            </div>
             <h2 class="fish-modal-title" id="fishModalTitle">The Fish Game</h2>
-            <div class="fish-api-link-wrap">
-              <span class="fish-api-source" id="fishApiSource">Connected: marcconrad.com/uob/fish</span>
-              <a href="https://marcconrad.com/uob/fish/doc.php" target="_blank" rel="noopener" class="fish-doc-pill" title="View Official API Documentation">API Docs ↗</a>
-            </div>
           </div>
           <div class="fish-header-right">
             <div class="reward-capsule">
@@ -200,25 +192,18 @@
           </div>
         </header>
 
-        <!-- macOS / visionOS Style Stage Container -->
+        <!-- Fish Game Puzzle Picture -->
         <div class="fish-canvas-window">
-          <div class="fish-window-bar">
-            <div class="window-controls" aria-hidden="true">
-              <span class="w-dot w-dot-close"></span>
-              <span class="w-dot w-dot-min"></span>
-              <span class="w-dot w-dot-max"></span>
-            </div>
-            <div class="window-title">Quest Canvas — Live Feed</div>
-            <div class="window-chip" id="fishQuestStatus">Quest is ready</div>
-          </div>
-
-          <!-- Picture Display Box -->
           <div class="fish-picture-card" id="fishPictureCard">
             <div class="fish-loading" id="fishLoading">
               <span class="btn-spinner" aria-hidden="true"></span>
               <span>Fetching Quest from Fish Game API...</span>
             </div>
             <img id="fishImg" class="fish-img" alt="Fish Game API Puzzle" style="display: none;" />
+          </div>
+          <div class="fish-status-row" role="status">
+            <span class="fish-status-orb" aria-hidden="true"></span>
+            <span id="fishQuestStatus">Quest is ready.</span>
           </div>
         </div>
 
