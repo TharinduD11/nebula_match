@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fishImg.onload = () => {
         fishLoading.style.display = 'none';
         fishImg.style.display = 'block';
-        if (fishQuestStatus) fishQuestStatus.textContent = 'Live API Feed • Quest Ready';
+        if (fishQuestStatus) fishQuestStatus.textContent = 'Quest is ready.';
         if (fishCountInput) {
           fishCountInput.disabled = false;
           fishCountInput.focus();

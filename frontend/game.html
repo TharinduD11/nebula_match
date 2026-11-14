@@ -8,6 +8,7 @@
   
   <!-- Shared Design System & Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/human-ui.css">
 </head>
 <body class="game-body">
 
@@ -185,10 +186,7 @@
             <h2 class="fish-modal-title" id="fishModalTitle">The Fish Game</h2>
           </div>
           <div class="fish-header-right">
-            <div class="reward-capsule">
-              <span class="reward-icon">✦</span>
-              <span class="reward-text">+15s Bonus Time</span>
-            </div>
+            <button type="button" class="fish-modal-close" id="closeChallengeBtn" aria-label="Back to game">×</button>
           </div>
         </header>
 
@@ -255,9 +253,6 @@
               <polyline points="3 3 3 8 8 8"></polyline>
             </svg>
             <span>Try Another Puzzle</span>
-          </button>
-          <button type="button" class="btn btn-secondary btn-sm" id="closeChallengeBtn">
-            <span>Back to Game</span>
           </button>
         </div>
 

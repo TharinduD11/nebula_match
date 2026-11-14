@@ -8,6 +8,7 @@
   
   <!-- Shared Design System & Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/human-ui.css">
 </head>
 <body>
 
@@ -50,17 +51,9 @@
     <main class="main-content">
       <section class="auth-card" aria-labelledby="login-heading">
         
-        <!-- Header & Logo Glyph -->
+        <!-- Header -->
         <header class="auth-header">
-          <div class="auth-header-glyph" aria-hidden="true">
-            <!-- Modern Cosmic Sparkle / Celestial Compass Icon -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path>
-              <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.3"></circle>
-            </svg>
-          </div>
           <h1 id="login-heading" class="auth-title">Welcome Back</h1>
-          <p class="auth-description">Sign in to play and track your scores.</p>
         </header>
 
         <!-- Dynamic Feedback Alert Container -->
@@ -78,16 +71,11 @@
               <label for="identifier" class="form-label">Email or Username</label>
             </div>
             <div class="input-wrapper">
-              <svg class="input-icon-lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
               <input 
                 type="text" 
                 id="identifier" 
                 name="identifier" 
                 class="form-input" 
-                placeholder="Enter your email or username" 
                 autocomplete="username" 
                 autocapitalize="none" 
                 spellcheck="false"
@@ -104,16 +92,11 @@
               <a href="#" id="forgotPasswordLink" class="label-link" tabindex="0">Forgot password?</a>
             </div>
             <div class="input-wrapper input-wrapper--has-trailing">
-              <svg class="input-icon-lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
               <input 
                 type="password" 
                 id="password" 
                 name="password" 
                 class="form-input" 
-                placeholder="••••••••••••" 
                 autocomplete="current-password" 
                 aria-required="true"
                 aria-describedby="passwordError">
@@ -151,7 +134,7 @@
         <!-- Card Footer & Registration Link -->
         <footer class="auth-footer">
           <p>
-            Don't have an explorer account? 
+            Don't have an account?
             <a href="signup.html" id="signupLink" class="link-accent">Sign Up</a>
           </p>
         </footer>
